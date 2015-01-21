@@ -5,7 +5,27 @@
 		[
 			[
 				"rot",
+				"rotateX"
+			],
+			[
+				"rota",
 				"rotateZ"
+			],
+			[
+				"supp",
+				"support_height"
+			],
+			[
+				"suppo",
+				"support_offset"
+			],
+			[
+				"sup",
+				"support_width"
+			],
+			[
+				"base",
+				"base_height"
 			],
 			[
 				"cy",
@@ -139,7 +159,15 @@
 			"file": "openjscad/smartcore.jscad",
 			"settings":
 			{
-				"buffer_size": 37826,
+				"buffer_size": 45659,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/admin/Documents/dev/smartrap/smartrap/openjscad/smartrap.jscad",
+			"settings":
+			{
+				"buffer_size": 10522,
 				"line_ending": "Unix"
 			}
 		}
@@ -292,6 +320,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"_bearingSupportDepth",
 			"cylinder",
 			"fn",
 			"cylinder",
@@ -531,15 +560,44 @@
 					"file": "openjscad/smartcore.jscad",
 					"settings":
 					{
-						"buffer_size": 37826,
+						"buffer_size": 45659,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								33196,
-								33196
+								43167,
+								43167
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 14840.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/Users/admin/Documents/dev/smartrap/smartrap/openjscad/smartrap.jscad",
+					"settings":
+					{
+						"buffer_size": 10522,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6502,
+								5668
 							]
 						],
 						"settings":
@@ -549,7 +607,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 10583.0,
+						"translation.y": 1774.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
