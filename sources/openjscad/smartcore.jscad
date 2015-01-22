@@ -225,6 +225,7 @@ function slideZ(){
     );
 }
 
+
 function slideZ2(){
     var width=12;
     var height = 50;
@@ -286,27 +287,6 @@ function slideZBeltAttach(){
         // screws holes for lmxuu support
         cylinder({r:1.6,h:width+5,fn:_globalResolution}).rotateY(90).translate([-1,3.4,height-5]),
         cylinder({r:1.6,h:width+5,fn:_globalResolution}).rotateY(90).translate([-1,3.4,5])
-    );
-}
-
-function supportBed(){
-    var width = _ZrodsWidth;
-    var height = 25;
-    var depth = 10;
-    return difference(
-        cube({size:[width,depth,height]}).setColor(0.2,0.7,0.2),
-        // support rods holes 
-        cylinder({r:2.6,h:30,fn:_globalResolution}).rotateX(83).rotateZ(5).translate([17,21,8]),
-        cylinder({r:2.6,h:30,fn:_globalResolution}).rotateX(83).rotateZ(-5).translate([_ZrodsWidth-17,21,8]),
-        // top holes
-        cylinder({r:1.4,h:30,fn:_globalResolution}).translate([5,depth/2,height/2]),
-        cylinder({r:1.4,h:30,fn:_globalResolution}).translate([width-5,depth/2,height/2]),
-        //rounded
-        roundBoolean(20,20,20,20,"tl").translate([width-10,0,-10]),
-        roundBoolean(20,20,20,20,"tr").translate([-10,0,-10]),
-        // hole to win material and print time 
-            cylinder({r:15,h:30,fn:_globalResolution}).rotateX(90).translate([width/2,depth,height])
-
     );
 }
 
@@ -392,13 +372,41 @@ function head(){
          cylinder({r:extDiam/2+0.6,h:height+jheadsupportheight-10,fn:_globalResolution}).translate([width/2,depth+2,0]),
          //cylinder({r:extDiam/2+0.1,h:5,fn:_globalResolution}).translate([width/2,depth+2,height+jheadsupportheight-5]),
          //cylinder({r:intDiam/2+0.1,h:intDiamHeight,fn:_globalResolution}).translate([width/2,depth+2,height+jheadsupportheight]),
-         
                  
-         // jhead attach holes holes 
-         cylinder({r:1.4,h:10,fn:_globalResolution}).rotateX(-90).translate([width/2-endxJheadAttachHolesWidth/2,depth-8,5]),
-         cylinder({r:1.4,h:10,fn:_globalResolution}).rotateX(-90).translate([width/2+endxJheadAttachHolesWidth/2,depth-8,5])
+         // jhead attach holes 
+         cylinder({r:1.4,h:30,fn:_globalResolution}).translate([width/2-endxJheadAttachHolesWidth/2,depth-5,0]),
+         cylinder({r:1.4,h:30,fn:_globalResolution}).translate([width/2+endxJheadAttachHolesWidth/2,depth-5,0])
          
 
+
+    );
+}
+
+function HeadSupportJhead(){
+    var width = 40;
+    var height = 15;
+    var depth = 8;
+    var extDiam=15.1;
+    var intDiam=12.1;
+    var intDiamHeight=5;
+    return difference(
+        union(
+            //base
+            cube({size:[width,depth,5]}),
+            // middle
+            cube({size:[width/2,depth,height-7]}).translate([width/4,0,5]),
+            // top
+            cube({size:[width,depth,8]}).translate([0,0,height-8])
+        ),
+        // jhead holes 
+         cylinder({r:extDiam/2+0.1,h:height-5,fn:_globalResolution}).translate([width/2,depth+1,0]),
+         cylinder({r:intDiam/2+0.1,h:intDiamHeight,fn:_globalResolution}).translate([width/2,depth+1,height-5]),
+         // jhead attach holes 
+         cylinder({r:1.3,h:30,fn:_globalResolution}).rotateX(-90).translate([width/2-endxJheadAttachHolesWidth/2,0,height-4]),
+         cylinder({r:1.3,h:30,fn:_globalResolution}).rotateX(-90).translate([width/2+endxJheadAttachHolesWidth/2,0,height-4]),
+         // head attach holes 
+         cylinder({r:1.3,h:8,fn:_globalResolution}).translate([width/2-endxJheadAttachHolesWidth/2,depth/2,0]),
+         cylinder({r:1.3,h:8,fn:_globalResolution}).translate([width/2+endxJheadAttachHolesWidth/2,depth/2,0])
 
     );
 }
@@ -462,7 +470,7 @@ function bearingsXY(){
     width = 42;
     var thickness = 5;
     var bearings=cube({size:0});
-    if(output==4){
+    if(output==1){
         bearings = union(
             //low bearing
             bearing608z().translate([35,10,thickness+6]).setColor(0.4,0.4,0.4),
@@ -576,101 +584,12 @@ function xend_Jhead_attach(){
             tube(3.2,10,8).rotateX(-90).translate([width/2-endxJheadAttachHolesWidth/2,-10,barHeight+4]),
             tube(3.2,10,8).rotateX(-90).translate([width/2+endxJheadAttachHolesWidth/2,-10,barHeight+4])
         ),
-         //cylinder({r:extDiam/2,h:10,fn:_globalResolution}).translate([width/2,0,0]),
-         //cylinder({r:intDiam/2,h:intDiamHeight,fn:_globalResolution}).translate([width/2,0,10]),
-         cylinder({r:extDiam/2,h:15,fn:_globalResolution}).translate([width/2,0,0])
+         cylinder({r:extDiam/2,h:10,fn:_globalResolution}).translate([width/2,0,0]),
+         cylinder({r:intDiam/2,h:intDiamHeight,fn:_globalResolution}).translate([width/2,0,10])
+         
 
     );  
     }
-
-function jhead_support_old(){
-    var width=30;
-    var height = 40;
-    var depth = 5;
-    var spaceZstopHoles = 19;
-
-    return difference(
-        union(
-            //main low
-            cube({size:[width,depth,height],center:true}).translate([-5,2.5,height/2]),
-            // support on head
-            cube({size:[width,15,4]}).translate([-width/2-5,-10,0]),
-            // renfort support arm
-            cube({size:[5,15,10]}).translate([-2,-10,4]),    
-            //arm support
-            slottedHole(16,30,10).rotateX(-90).rotateY(90).translate([20,-5,22])
-
-
-  
-        ),
-        //zstop holes with slotted 
-        slottedHole(3.2,6,20).rotateX(-90).translate([-width/2,-10,height-3]),
-        slottedHole(3.2,6,20).rotateX(-90).translate([-width/2+spaceZstopHoles,-10,height-3]), 
-        //arm support hle
-        cylinder({r:1.4,h:2*depth+1,fn:_globalResolution}).rotateX(-90).translate([20,-6,22]),
-        // hole for jhead
-        cylinder({r:8,h:10,fn:_globalResolution}).translate([-10,-12,0]),
-        // screw support on head
-        cylinder({r:1.6,h:8,fn:_globalResolution}).translate([-width/2-2,-3,0]),
-        cylinder({r:1.6,h:8,fn:_globalResolution}).translate([7,-3,0]),
-        // remove some part
-        roundBoolean(10,15,18,10,"tr").rotateX(-90).translate([-3,-10,30])
-
-    );
-
-}
-
-function jhead_arm_old(){
-    var extDiam=15;
-    var intDiam=12;
-    var intDiamHeight=5;
-    var depth = 10;
-    var width = 60;
-    var barHeight = 6;
-
-    return difference(
-        union(
-            //main
-            cube([width-16,depth,barHeight]).translate([16,0,0]),
-            //right cyl
-            cylinder({r:8,h:depth,fn:_globalResolution}).rotateX(-90).translate([width,0,8]),
-            //middle form
-            cube([endxJheadAttachHolesWidth-5,depth,6]).translate([width/2-((endxJheadAttachHolesWidth-5)/2),0,barHeight]),
-            //for 2 screws attach
-            tube(2.8,10,depth).rotateX(-90).translate([width/2-endxJheadAttachHolesWidth/2,0,barHeight+2]),
-            tube(2.8,10,depth).rotateX(-90).translate([width/2+endxJheadAttachHolesWidth/2,0,barHeight+2])
-        ),
-        // screw hole right
-        cylinder({r:1.6,h:depth,fn:_globalResolution}).rotateX(-90).translate([width,0,8]),
-        // jhead holes *3
-         cylinder({r:extDiam/2,h:10,fn:_globalResolution}).translate([width/2,0,5]),
-         cylinder({r:intDiam/2,h:intDiamHeight,fn:_globalResolution}).translate([width/2,0,0])
-         //cylinder({r:extDiam/2,h:8,fn:_globalResolution}).translate([width/2,0,10+intDiamHeight])
-    );  
-    
-}
-
-function jhead_attach_old(){
-    var extDiam=16;
-    var intDiam=12;
-    var intDiamHeight=5;
-    var depth = 12;
-    var width = 75;
-    var barHeight = 6;
-
-    return difference(
-        union(
-            cube([endxJheadAttachHolesWidth-5,8,12]).translate([width/2-((endxJheadAttachHolesWidth-5)/2),-10,2]),
-            tube(3.2,10,8).rotateX(-90).translate([width/2-endxJheadAttachHolesWidth/2,-10,barHeight+4]),
-            tube(3.2,10,8).rotateX(-90).translate([width/2+endxJheadAttachHolesWidth/2,-10,barHeight+4])
-        ),
-         //cylinder({r:extDiam/2,h:10,fn:_globalResolution}).translate([width/2,-1,0]),
-         cylinder({r:intDiam/2,h:intDiamHeight,fn:_globalResolution}).translate([width/2,-1,2]),
-         cylinder({r:extDiam/2,h:10,fn:_globalResolution}).translate([width/2,-1,intDiamHeight+2])
-
-    );  
-    
-}
 
 function fakeJhead(){
     return union(
@@ -989,8 +908,8 @@ var res=null;
 //"nothing","All printer assembly", "printed parts plate","motor xy","bearings xy","slide y","z top","z bottom","z slide","head","bed support"
 switch(output){
     case 0:
-        res = [
-        xend_Jhead_attach()
+        res = [HeadSupportJhead()
+        
 
         ];
     break;
@@ -1021,13 +940,14 @@ switch(output){
             
             slideY("right").mirroredX().translate([_globalWidth/2-_wallThickness-3,-_rodsSupportThickness-_XYrodsDiam/2+XaxisOffset,_globalHeight-22]),
             head().translate([-80,-(_XYlmDiam/2+(_rodsSupportThickness*2))+XaxisOffset,_globalHeight-22]),
-            xend_Jhead_attach().rotateZ(180).translate([-15,XaxisOffset+52,_globalHeight-20]),
+            HeadSupportJhead().translate([-74,-(_XYlmDiam/2+(_rodsSupportThickness*2))+XaxisOffset+57,_globalHeight-8]),
+            xend_Jhead_attach().rotateZ(180).translate([-16,XaxisOffset+51,_globalHeight-2]),
             
             // Z stage 
             _nema().rotateX(-90).translate([-_nemaXYZ/2,_globalDepth/2-_wallThickness-_nemaXYZ-20,_wallThickness+_nemaXYZ]),
             zTop().translate([0,_globalDepth/2-_wallThickness,_globalHeight-35]),
             zBottom().translate([0,_globalDepth/2-_wallThickness,_wallThickness]),
-            slideZ().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-70,_globalHeight/2-40]),
+            slideZ().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness,_globalHeight/2-40]),
             /*
             slideZ2().translate([_ZrodsWidth/2-1,_globalDepth/2-_wallThickness-70,_globalHeight/2-40]),
             slideZBearingsSupport().mirroredX().translate([_ZrodsWidth/2-2,_globalDepth/2-_wallThickness-15,_globalHeight/2-40]),
