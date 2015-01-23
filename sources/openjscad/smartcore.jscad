@@ -77,7 +77,7 @@ function getParameterDefinitions() {
         caption: 'Show:', 
         type: 'choice', 
         values: [0,1,2,3,4,5,6,7,8,9,10,11], 
-        initial: 10, 
+        initial: 1, 
         captions: ["nothing","All printer assembly", "printed parts plate","motor xy","bearings xy","slide y","z top","z bottom","z slide","head","extruder","parts only"]
     },
     { name: '_globalResolution', caption: 'resolution (16, 24, 32 for export)', type: 'int', initial: 8 },
