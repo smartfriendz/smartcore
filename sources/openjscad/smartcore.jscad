@@ -333,7 +333,10 @@ function slideY(side){
         //hole  between rods - to gain weight and print time
         cylinder({r:10,h:height,fn:_globalResolution}).translate([width,depth/2,0]),
         // endstop x hole
-        cylinder({r:1.4,h:10,fn:_globalResolution}).rotateX(-90).translate([width-4,depth-10,5])
+        cylinder({r:1.4,h:10,fn:_globalResolution}).rotateX(-90).translate([width-4,depth-10,5]),
+        //extra holes through all for bearing supports
+        cylinder({r:1.4,h:height,fn:_globalResolution}).translate([32,depth/2-15,0]),
+        cylinder({r:1.4,h:height,fn:_globalResolution}).translate([32,depth/2+15,0])
        
 
         
@@ -577,12 +580,12 @@ function extruderDirect(){
     var X = 50;
     var Z = 9;
     var Y = 60; 
-    var bearingoffsetX = 17.5;
+    var bearingoffsetX = 16.8;
     var jheadExtDiam = 15.5;
-    var jheadIntDiam = 11.5;
-    var jheadOffsetX = 4;
+    var jheadIntDiam = 12.5;
+    var jheadOffsetX = 5;
     //elastic part
-    var epoffsetX = 2;
+    var epoffsetX = 3;
     var epoffsetY = 45;
     // this is to adjust how elastic will the bearing be.
     var elasticpartlength = 13;
@@ -593,9 +596,7 @@ function extruderDirect(){
             // main top
             cube({size:[X,Y,Z],center:true}).translate([0,5,Z+0.05])
         
-         
-
-            
+           
         ),
         nemaHole2().translate([0,0,-Z/2]),
         
@@ -612,7 +613,7 @@ function extruderDirect(){
         // jhead
         cylinder({r:jheadExtDiam/2,h:6,fn:_globalResolution}).rotateX(-90).translate([jheadOffsetX,Y/2,Z/2]),
         cylinder({r:jheadIntDiam/2,h:4,fn:_globalResolution}).rotateX(-90).translate([jheadOffsetX,Y/2-4,Z/2]),
-        cylinder({r:jheadExtDiam/2,h:5,fn:_globalResolution}).rotateX(-90).translate([jheadOffsetX,Y/2-9,Z/2]),
+        cylinder({r:jheadExtDiam/2,h:5.5,fn:_globalResolution}).rotateX(-90).translate([jheadOffsetX,Y/2-9.5,Z/2]),
          
          // jhead holes : 2 parts. up to pass screws, bottom to fix
          cylinder({r:1.6,h:10,fn:_globalResolution}).translate([jheadOffsetX-15,Y/2-5,Z/2]),
@@ -621,27 +622,30 @@ function extruderDirect(){
          cylinder({r:1.3,h:10,fn:_globalResolution}).translate([jheadOffsetX+15,Y/2-5,-Z/2]),
          
          // fan holes 
-         cylinder({r:1.3,h:10,fn:_globalResolution}).translate([-20,Y/2,Z/2]),
-         cylinder({r:1.3,h:10,fn:_globalResolution}).translate([20,Y/2,Z/2]),
+         //cylinder({r:1.3,h:10,fn:_globalResolution}).translate([-20,Y/2,Z/2]),
+         //cylinder({r:1.3,h:10,fn:_globalResolution}).translate([20,Y/2,Z/2]),
 
 
         // filament
         cylinder({r:1,h:Y,fn:_globalResolution}).rotateX(-90).translate([jheadOffsetX,-Y/2,Z/2]),
+        cylinder({r1:3,r2:1,h:5,fn:_globalResolution}).rotateX(-90).translate([jheadOffsetX,8,Z/2]),
+        cylinder({r:1.5,h:3,fn:_globalResolution}).rotateX(-90).translate([jheadOffsetX,19,Z/2]),
+
         
         // elastic part with two holes
         cube({size:[2,epoffsetY,2*Z+1]}).translate([jheadOffsetX+epoffsetX,-Y/2,-Z/2]),
         cube({size:[elasticpartlength,2,2*Z+1]}).translate([jheadOffsetX+epoffsetX,-Y/2+epoffsetY,-Z/2]),
         
         // attach holes
-         cylinder({r:1.3,h:10,fn:_globalResolution}).rotateX(-90).translate([20,Y/2-5,0]),
-         cylinder({r:1.3,h:10,fn:_globalResolution}).rotateX(-90).translate([-15,Y/2-5,0]),
+         cylinder({r:1.3,h:10,fn:_globalResolution}).rotateX(-90).translate([jheadOffsetX+15,Y/2-3,0]),
+         cylinder({r:1.3,h:10,fn:_globalResolution}).rotateX(-90).translate([jheadOffsetX-15,Y/2-3,0]),
 
 
             // material win holes
         roundBoolean(15,10,22,10,"tr").rotateX(-90).translate([-X/2-3,-Y/2+2,Z*2-2]),
-        roundBoolean(15,10,22,10,"br").rotateX(-90).translate([-X/2-3,Y/2-2,Z*2-2]),
-        roundBoolean(15,10,22,10,"tl").rotateX(-90).translate([X/2-7,-Y/2+2,Z*2-2]),
-        roundBoolean(15,10,22,10,"bl").rotateX(-90).translate([X/2-7,Y/2-2,Z*2-2])
+        //roundBoolean(15,10,22,10,"br").rotateX(-90).translate([-X/2-3,Y/2-2,Z*2-2]),
+        roundBoolean(15,10,22,10,"tl").rotateX(-90).translate([X/2-7,-Y/2+2,Z*2-2])
+        //roundBoolean(15,10,22,10,"bl").rotateX(-90).translate([X/2-7,Y/2-2,Z*2-2])
        
     )
 
