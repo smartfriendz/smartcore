@@ -10,10 +10,7 @@ date: 11 / 2014
 
 
 TODO:
-- slide y : systeme pour tenir les barres avec vis ? 
-- head : double passage de courroie pour tenir
-- slide Z. support courroie double passage
-- motor xy right : support pour end x
+
 
 
 
@@ -73,8 +70,8 @@ _extrusionType = 0; // 0 bowden 1 direct
 */
 // -----------------  printed elements 
 
-assembly();
-
+//assembly();
+bearingsXY();
 
 module zTop(){
      width = _ZrodsWidth+_ZrodsDiam+(_rodsSupportThickness*2);
@@ -248,8 +245,8 @@ module slideZ(){
         cylinder(r=1.4,h=30,fn=_globalResolution);
         //bottom holes
 
-        //cylinder(r=2.4,h=10,fn=_globalResolution).rotateX(83).rotateZ(5).translate([0,-7,10]};
-        //cylinder(r=2.4,h=10,fn=_globalResolution).rotateX(83).rotateZ(-5).translate([_ZrodsWidth,-7,10]};
+        //cylinder(r=2.4,h=10,fn=_globalResolution).rotateX(83).rotateZ(5).translate([0,-7,10]);
+        //cylinder(r=2.4,h=10,fn=_globalResolution).rotateX(83).rotateZ(-5).translate([_ZrodsWidth,-7,10]);
         // top holes
         translate([0,-20,height-30])
         cylinder(r=1.4,h=30,fn=_globalResolution);

@@ -407,15 +407,16 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
   // Note: this feature occupies 10'206 byte
   #ifdef AUTO_BED_LEVELING_GRID
 
+   // reglage pour la prod
     // set the rectangle in which to probe
-    #define LEFT_PROBE_BED_POSITION 40
+    #define LEFT_PROBE_BED_POSITION 20
     #define RIGHT_PROBE_BED_POSITION 190
     #define BACK_PROBE_BED_POSITION 180
-    #define FRONT_PROBE_BED_POSITION 40
+    #define FRONT_PROBE_BED_POSITION 20
     
-    /* reglage pour le proto
+    // reglage pour le proto
      // set the rectangle in which to probe
-    #define LEFT_PROBE_BED_POSITION 20
+    /*#define LEFT_PROBE_BED_POSITION 20
     #define RIGHT_PROBE_BED_POSITION 190
     #define BACK_PROBE_BED_POSITION 120
     #define FRONT_PROBE_BED_POSITION 5
