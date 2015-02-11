@@ -61,7 +61,7 @@ function getParameterDefinitions() {
         caption: 'What to show :', 
         type: 'choice', 
         values: [0,1,2,3,4,5,6,7,8,9,10,11,12], 
-        initial: 1, 
+        initial: 3, 
         captions: ["nothing",
                     "All printer assembly", 
                     "printed parts plate",
@@ -76,7 +76,7 @@ function getParameterDefinitions() {
                     "parts only",
                     "Walls and rods sizes"]
     },
-    { name: '_globalResolution', caption: 'output resolution (16, 24, 32)', type: 'int', initial: 6 },   
+    { name: '_globalResolution', caption: 'output resolution (16, 24, 32)', type: 'int', initial: 16 },   
   
     { name: '_printableWidth', caption: 'Print width:', type: 'int', initial: 200 },
     { name: '_printableHeight', caption: 'Print height :', type: 'int', initial: 150 },
@@ -571,20 +571,22 @@ function motorXY(){
     return difference(
     union(
         // base
-        cube({size:[_nemaXYZ/2,_nemaXYZ,thickness]}).setColor(0.2,0.7,0.2),
+        cube({size:[_nemaXYZ/2,_nemaXYZ,thickness+2]}).setColor(0.2,0.7,0.2),
         // wall support
         cube({size:[9,_nemaXYZ,20]}).setColor(0.2,0.7,0.2),
         //top and back fix
         cube({size:[_wallThickness+9,_nemaXYZ,thickness]}).translate([-_wallThickness,0,20]).setColor(0.2,0.7,0.2),
         cube({size:[thickness,_nemaXYZ,20+thickness]}).translate([-_wallThickness-thickness,0,0]).setColor(0.2,0.7,0.2),
         // rod support - half slotted hole
-        cylinder({r:_XYrodsDiam/2+3,h:15,fn:_globalResolution}).rotateX(90).translate([20,_nemaXYZ,thickness+1]).setColor(0.2,0.7,0.2)
+        cylinder({r:_XYrodsDiam/2+3,h:15,fn:_globalResolution}).rotateX(90).translate([20,_nemaXYZ,6]).setColor(0.2,0.7,0.2)
 
 
     ),
     nemaHole(_nemaXYZ).translate([_nemaXYZ/2,_nemaXYZ/2,0]),
     // rod support hole
-    cylinder({r:_XYrodsDiam/2,h:5,fn:_globalResolution}).rotateX(90).translate([20,_nemaXYZ,thickness+1]).setColor(0.2,0.7,0.2),
+    cylinder({r:_XYrodsDiam/2,h:12,fn:_globalResolution}).rotateX(90).translate([20,_nemaXYZ,6]).setColor(0.2,0.7,0.2),
+    //extra bool for printable
+    cube({size:[15,10,15]}).rotateZ(30).translate([_nemaXYZ/2,_nemaXYZ-19.5,0]),
     // round
     roundBoolean2(5,_nemaXYZ,"br").translate([-_wallThickness-thickness,0,thickness+15]),
     //  holes to fix on the wood side - version simple
