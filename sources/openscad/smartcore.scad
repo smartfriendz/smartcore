@@ -71,7 +71,7 @@ _extrusionType = 0; // 0 bowden 1 direct
 // -----------------  printed elements 
 
 //assembly();
-bearingsXY();
+zTop();
 
 module zTop(){
      width = _ZrodsWidth+_ZrodsDiam+(_rodsSupportThickness*2);
