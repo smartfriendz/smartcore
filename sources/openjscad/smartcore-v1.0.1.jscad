@@ -52,7 +52,7 @@ var output; // show hide objects  from output choosen in the parameters.
 
 function getParameterDefinitions() {
   return [
-  { name: '_version', caption: 'Version', type: 'text', initial: "1.0.1 feb 25 2015" },
+  { name: '_version', caption: 'Version', type: 'text', initial: "1.0.2 feb 26 2015" },
   { 
         name: '_output', 
         caption: 'What to show :', 
@@ -614,8 +614,8 @@ function motorXY(){
     roundBoolean2(5,_nemaXYZ,"br").translate([-_wallThickness-thickness,0,thickness+15]),
     //  holes to fix on the wood side - version simple
     // wood screw holes
-    cylinder({r:2.1,h:20,fn:_globalResolution}).rotateX(-90).rotateZ(90).translate([0,5,5]),
-    cylinder({r:2.1,h:20,fn:_globalResolution}).rotateX(-90).rotateZ(90).translate([0,_nemaXYZ-5,5]),
+    cylinder({r:2.1,h:20,fn:_globalResolution}).rotateX(-90).rotateZ(90).translate([-_wallThickness,5,5]),
+    cylinder({r:2.1,h:20,fn:_globalResolution}).rotateX(-90).rotateZ(90).translate([-_wallThickness,_nemaXYZ-5,5]),
     // extra nema bool (motor body)
     cube({size:[_nemaXYZ,_nemaXYZ,_nemaXYZ]}).translate([0,0,-_nemaXYZ])
     );
@@ -631,9 +631,9 @@ function bearingsXY(){
     var Y = 20;
     var Z = 33;
     var bearingsOffsetZ = 10;
-    var bearingsOffsetX = 20;
+    var bearingsOffsetX = 10+_wallThickness;
     var bearingHoleOffsetX = bearingsOffsetX+13;
-    var X = 32;
+    var X = 22+_wallThickness;
     mesh = difference(
         
         union(
@@ -647,8 +647,8 @@ function bearingsXY(){
                         cube({size:[Y,Y,Z]}).translate([X-Y,0,0])
                     ),
                     // Y rod hole xtra
-                    cylinder({r:_XYrodsDiam-1,h:10,fn:_globalResolution}).rotateX(-90).rotateZ(90).translate([30,-8,1]),
-                    cube({size:[10,10,_XYrodsDiam]}).translate([30-10,-8,0])
+                    cylinder({r:_XYrodsDiam-1,h:10,fn:_globalResolution}).rotateX(-90).rotateZ(90).translate([20+_wallThickness,-8,1]),
+                   cube({size:[10,10,_XYrodsDiam]}).translate([10+_wallThickness,-8,0])
                 ),
             // support bearings
             cube({size:[X+10,Y,8]}).translate([bearingsOffsetX,0,bearingsOffsetZ]),
@@ -667,7 +667,7 @@ function bearingsXY(){
         // wood support
         cube({size:[_wallThickness,Y,17]}).translate([5,0,0]),
         // Y rod hole
-        cylinder({r:_XYrodsDiam/2,h:10,fn:_globalResolution}).rotateX(-90).rotateZ(90).translate([30,-8,1]),
+        cylinder({r:_XYrodsDiam/2,h:10,fn:_globalResolution}).rotateX(-90).rotateZ(90).translate([20+_wallThickness,-8,1]),
         //round
         roundBoolean2(10,Y,"br").translate([0,0,Z-10]),
         // xtra save material
@@ -1367,8 +1367,8 @@ switch(output){
 
             motorXY().translate([-_globalWidth/2,-_globalDepth/2,_globalHeight-20]),
             motorXY().mirroredX().translate([_globalWidth/2,-_globalDepth/2,_globalHeight-20]),
-            bearingsXY().rotateZ(-90).translate([-_globalWidth/2+_wallThickness+18,_globalDepth/2+_wallThickness+5,_globalHeight-17]),
-            bearingsXY().mirroredX().rotateZ(90).translate([_globalWidth/2-_wallThickness-18,_globalDepth/2+_wallThickness+5,_globalHeight-17]),
+            bearingsXY().rotateZ(-90).translate([-_globalWidth/2+28,_globalDepth/2+_wallThickness+5,_globalHeight-17]),
+            bearingsXY().mirroredX().rotateZ(90).translate([_globalWidth/2-28,_globalDepth/2+_wallThickness+5,_globalHeight-17]),
             slideY().translate([-_globalWidth/2+6,XaxisOffset,_globalHeight-22]),
             slideY().mirroredX().translate([_globalWidth/2-6,XaxisOffset,_globalHeight-22]),
             //endstop x
