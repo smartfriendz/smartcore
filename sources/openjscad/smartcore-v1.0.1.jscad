@@ -52,7 +52,7 @@ var output; // show hide objects  from output choosen in the parameters.
 
 function getParameterDefinitions() {
   return [
-  { name: '_version', caption: 'Version', type: 'text', initial: "1.0.2 feb 26 2015" },
+  { name: '_version', caption: 'Version', type: 'text', initial: "1.0.4 feb 28 2015" },
   { 
         name: '_output', 
         caption: 'What to show :', 
@@ -425,8 +425,8 @@ function headLeft(){
         cylinder({r:_XYlmDiam/2,h:X,fn:_globalResolution}).rotateY(90).translate([0,Y/2,15]),
         cylinder({r:_XYlmDiam/2,h:X,fn:_globalResolution}).rotateY(90).translate([0,Y/2,15+xrodOffset]),
         // head attach holes 
-         cylinder({r:1.3,h:22,fn:_globalResolution}).rotateX(-90).translate([13,0,37]),
-         cylinder({r:1.3,h:22,fn:_globalResolution}).rotateX(-90).translate([13,0,20]),
+         cylinder({r:1.3,h:22,fn:_globalResolution}).rotateX(-90).translate([13,0,40]),
+         cylinder({r:1.3,h:22,fn:_globalResolution}).rotateX(-90).translate([13,0,23]),
          // rodx extra to ease insert
         cube({size:[X,1,Z]}).translate([0,Y/2-1,-10]),
         // screw to fix rodx guides
@@ -457,8 +457,8 @@ function headRight(){
         cylinder({r:_XYlmDiam/2,h:X,fn:_globalResolution}).rotateY(90).translate([0,Y/2,15]),
         cylinder({r:_XYlmDiam/2,h:X,fn:_globalResolution}).rotateY(90).translate([0,Y/2,15+xrodOffset]),
         // head attach holes 
-         cylinder({r:1.3,h:22,fn:_globalResolution}).rotateX(-90).translate([3,0,37]),
-         cylinder({r:1.3,h:22,fn:_globalResolution}).rotateX(-90).translate([3,0,20]),
+         cylinder({r:1.3,h:22,fn:_globalResolution}).rotateX(-90).translate([3,0,40]),
+         cylinder({r:1.3,h:22,fn:_globalResolution}).rotateX(-90).translate([3,0,23]),
 
         cube({size:[X,1,Z]}).translate([0,Y/2-1,-10]) ,
         // screw to fix rodx guides
@@ -1431,7 +1431,7 @@ switch(output){
             headLeft().rotateY(-90),
             headRight().rotateY(90),
 
-            zTop().rotateX(-90),
+            zTop(),
             zBottom(),
             slideZ2().rotateX(180)
             
@@ -1439,7 +1439,7 @@ switch(output){
             //bowden
             
             if(_extrusionType==1){
-                res.push(InductiveSensorSupport2());
+                res.push(InductiveSensorSupport2().rotateX(180));
                 res.push(HeadSupportJhead().rotateX(90));
                 // nema extruder
                 res.push(extruder(_extrusionType,0));
