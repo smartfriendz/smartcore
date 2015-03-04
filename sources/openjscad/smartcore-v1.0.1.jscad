@@ -24,7 +24,7 @@ var _printableHeight;
 var _wallThickness; // box wood thickness
 var _XYrodsDiam; // usually 6 or 8 .. or 10? 
 var _XYlmDiam; // lm6uu, lm8uu ... will be calculated from rods diam
-var _ZrodsDiam; // usually 6 or 8 .. or 10? 
+var _ZrodsDiam; // usually 6, 8, 10 or 12 
 var _ZlmDiam; // lm6uu, lm8uu ... will be calculated from rods diam
 var _nemaXYZ;  // nema 14 , nema 17 
 var _XrodsWidth=40; //space between rods on X axis
@@ -52,7 +52,7 @@ var output; // show hide objects  from output choosen in the parameters.
 
 function getParameterDefinitions() {
   return [
-  { name: '_version', caption: 'Version', type: 'text', initial: "1.0.4 feb 28 2015" },
+  { name: '_version', caption: 'Version', type: 'text', initial: "1.0.5 mar 4 2015" },
   { 
         name: '_output', 
         caption: 'What to show :', 
@@ -82,7 +82,7 @@ function getParameterDefinitions() {
     { name: '_printableDepth', caption: 'Print depth :', type: 'int', initial: 200 },
     { name: '_wallThickness', caption: 'Box wood thickness:', type: 'int', initial: 10 },
     { name: '_XYrodsDiam', caption: 'X Y Rods diameter (6 or 8 ):', type: 'int', initial: 6},
-    { name: '_ZrodsDiam', caption: 'Z Rods diameter (6 or 8 ):', type: 'int', initial: 8},
+    { name: '_ZrodsDiam', caption: 'Z Rods diameter (6,8,10,12):', type: 'int', initial: 8},
     
     
     {name: '_nemaXYZ', 
@@ -165,6 +165,7 @@ function zBottom(){
     var width = _ZrodsWidth+_ZrodsDiam+(_rodsSupportThickness*2)+26;
     var height = 10;
     var depth = 22;
+    var inside_cut_x = _ZrodsWidth-_ZrodsDiam-_rodsSupportThickness*2;
     
     return difference(
         //main
@@ -175,9 +176,9 @@ function zBottom(){
 
         // inside form
         nemaHole(_nemaXYZ).rotateX(90).translate([0,0,_nemaXYZ/2-height/2]),
-        cube({size:[width/2-5,depth,height],center:true}).translate([0,10,0]),
+        cube({size:[inside_cut_x,depth,height],center:true}).translate([0,10,0]),
         // outside form left
-             cube({size:[13,depth,height],center:true}).translate([-width/2+6.5,-5,0]),
+             cube({size:[13,depth,height],center:true}).translate([-width/2+6.5,-5,0]).setColor(1,1,1),
              // outside form right
              cube({size:[13,depth,height],center:true}).translate([width/2-6.5,-5,0]),
         // z rod left
@@ -230,6 +231,11 @@ function slideZ2(){
     var height = 40;
     var depth = 5;
     var insideWidth = 35;
+    var lmXuu_support_r = _rodsSupportThickness + _ZlmDiam / 2;
+    var side_plate_size = 7;
+    var side_form_size = lmXuu_support_r + side_plate_size;
+    // lmXuu set screws offset
+    var set_screw_offset = lmXuu_support_r + side_plate_size / 2 - 1;
     return difference(
         //main form
         union(
@@ -238,12 +244,12 @@ function slideZ2(){
             Gt2Holder2().rotateX(90).rotateY(90).translate([width/2-10,3,height-13]).setColor(0.2,0.7,0.2),
             
             //Gt2Holder(3).rotateX(90).rotateY(90).translate([width/2-10,1,10]).setColor(0.2,0.7,0.2),
-            // lm8uu holes
-            cylinder({r:_ZlmDiam/2+3,h:height,fn:_globalResolution}).translate([0,0,0]).setColor(0.2,0.7,0.2),
-            cylinder({r:_ZlmDiam/2+3,h:height,fn:_globalResolution}).translate([_ZrodsWidth,0,0]).setColor(0.2,0.7,0.2),
-            // side forms for lm8 attach
-            cube({size:[10,10,height]}).translate([_ZrodsWidth+7,-4,0]).setColor(0.2,0.7,0.2),
-            cube({size:[10,10,height]}).translate([-17,-4,0]).setColor(0.2,0.7,0.2),
+            // lmXuu support
+            cylinder({r:lmXuu_support_r,h:height,fn:_globalResolution}).setColor(0.2,0.7,0.2),
+            cylinder({r:lmXuu_support_r,h:height,fn:_globalResolution}).translate([_ZrodsWidth,0,0]).setColor(0.2,0.7,0.2),
+            // side forms for lmXuu attach
+            cube({size:[side_form_size,10,height]}).translate([_ZrodsWidth,-4,0]).setColor(0.2,0.7,0.2),
+            cube({size:[side_form_size,10,height]}).translate([-side_form_size,-4,0]).setColor(0.2,0.7,0.2),
 
             // extra forms front bearings holes
             cube([7,60,height]).translate([-3.5,-55,0]).setColor(0.2,0.7,0.2),
@@ -265,14 +271,14 @@ function slideZ2(){
         cylinder({r:_ZlmDiam/2,h:height,fn:_globalResolution}).translate([0,0,0]),
         //z rod right linear bearing lm
         cylinder({r:_ZlmDiam/2,h:height,fn:_globalResolution}).translate([_ZrodsWidth,0,0]),
-        // side holes for lm8 attach
-        cube({size:[12,2,height]}).translate([_ZrodsWidth+5,0,0]),
-        cube({size:[12,2,height]}).translate([-18,0,0]),
-        // side holes for lm8 screws
-        cylinder({r:1.4,h:30,fn:_globalResolution}).rotateX(90).translate([_ZrodsWidth+12,20,height-10]),
-        cylinder({r:1.4,h:30,fn:_globalResolution}).rotateX(90).translate([_ZrodsWidth+12,20,10]),
-        cylinder({r:1.4,h:30,fn:_globalResolution}).rotateX(90).translate([-12,20,height-10]),
-        cylinder({r:1.4,h:30,fn:_globalResolution}).rotateX(90).translate([-12,20,10]),
+        // side holes for lmXuu attach
+        cube({size:[side_form_size+1,2,height]}).translate([_ZrodsWidth,0,0]),
+        cube({size:[side_form_size+1,2,height]}).translate([-side_form_size-1,0,0]),
+        // side holes for lmXuu screws
+        cylinder({r:1.4,h:30,fn:_globalResolution}).rotateX(90).translate([_ZrodsWidth+set_screw_offset,20,height-10]),
+        cylinder({r:1.4,h:30,fn:_globalResolution}).rotateX(90).translate([_ZrodsWidth+set_screw_offset,20,10]),
+        cylinder({r:1.4,h:30,fn:_globalResolution}).rotateX(90).translate([-set_screw_offset,20,height-10]),
+        cylinder({r:1.4,h:30,fn:_globalResolution}).rotateX(90).translate([-set_screw_offset,20,10]),
         //bottom holes
         //cylinder({r:2.4,h:10,fn:_globalResolution}).rotateX(83).rotateZ(5).translate([0,-7,10]),
         //cylinder({r:2.4,h:10,fn:_globalResolution}).rotateX(83).rotateZ(-5).translate([_ZrodsWidth,-7,10]),
@@ -282,7 +288,7 @@ function slideZ2(){
         cylinder({r:1.4,h:30,fn:_globalResolution}).translate([0,-40,height-30]),
         cylinder({r:1.4,h:30,fn:_globalResolution}).translate([_ZrodsWidth,-40,height-30]),
         // special hole in gt2 holder to be able to get the belt out .. but still printable vertically.
-            linear_extrude({height:20},polygon({points:[[0,0],[6,0],[4,10],[2,10]]})).rotateY(-90).translate([width/2+5,-10,height-15])
+            linear_extrude({height:20},polygon({points:[[0,0],[6,0],[4,10],[2,10]]})).rotateY(-90).translate([width/2+7,-10,height-15])
 
         
     );
@@ -1310,6 +1316,8 @@ function main(params){
     if(_XYrodsDiam==8){ _XYlmDiam = 15;}
     if(_ZrodsDiam==6){ _ZlmDiam = 12;}
     if(_ZrodsDiam==8){ _ZlmDiam = 15;}
+    if(_ZrodsDiam==10){ _ZlmDiam = 19;}
+    if(_ZrodsDiam==12){ _ZlmDiam = 21;}
 
 
     _globalDepth = _printableDepth + 110; // = motor support depth + bearings depth + head depth /2
@@ -1380,14 +1388,14 @@ switch(output){
             headRight().translate([headoffset+32,XaxisOffset,_globalHeight-28]),
             // Z stage 
             _nema().rotateX(-90).translate([-_nemaXYZ/2,_globalDepth/2-_wallThickness-_nemaXYZ-20,_wallThickness+_nemaXYZ]),
-            zTop().translate([0,_globalDepth/2-_wallThickness-5,_globalHeight-35]),
+            zTop().translate([0,_globalDepth/2-_wallThickness,_globalHeight-35]),
             zBottom().translate([0,_globalDepth/2-_wallThickness,_wallThickness]),
             //slideZ().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-40]),
             //slideZ().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-10]),
             //slideZsupport().translate([-_ZrodsWidth/2-_ZlmDiam/2-14-7,_globalDepth/2-_wallThickness-68,_globalHeight/2-45]),
             //slideZsupport().translate([_ZrodsWidth/2+_ZlmDiam/2+14,_globalDepth/2-_wallThickness-68,_globalHeight/2-45]),
             
-            slideZ2().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-4,_globalHeight/2-30]),
+            slideZ2().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-30]),
 
             _bed().translate([-_printableWidth/2,-_printableDepth/2-20,_globalHeight/2+10]),
 
