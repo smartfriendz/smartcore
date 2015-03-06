@@ -409,10 +409,10 @@ const bool Z_MAX_ENDSTOP_INVERTING = true; // set to true to invert the logic of
 
    // reglage pour la prod
     // set the rectangle in which to probe
-    #define LEFT_PROBE_BED_POSITION 10
+    #define LEFT_PROBE_BED_POSITION 5
     #define RIGHT_PROBE_BED_POSITION 140
     #define BACK_PROBE_BED_POSITION 160
-    #define FRONT_PROBE_BED_POSITION 25
+    #define FRONT_PROBE_BED_POSITION 30
     
     // reglage pour le proto
      // set the rectangle in which to probe
