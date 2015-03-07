@@ -85,7 +85,7 @@ function getParameterDefinitions() {
     { name: '_wallThickness', caption: 'Box wood thickness:', type: 'int', initial: 10 },
     { name: '_XYrodsDiam', caption: 'X Y Rods diameter (6 or 8 ):', type: 'int', initial: 6},
     { name: '_ZrodsDiam', caption: 'Z Rods diameter (6,8,10,12):', type: 'int', initial: 8},
-    { name: '_ZrodsOption', caption: 'Z threaded rods:', type: 'choice', initial: 1, values:[1,0],captions: ["true", "false"]},
+    { name: '_ZrodsOption', caption: 'Z threaded rods:', type: 'choice', initial: 0, values:[1,0],captions: ["true", "false"]},
     
     
     {name: '_nemaXYZ', 
@@ -261,7 +261,7 @@ function slideZ2(){
     var height = 40;
     var depth = 5;
     var insideWidth = 35;
-    var nutRadius = 10;
+    var nutRadius = 14.5/2;
 	
 	if (_ZrodsOption===1) {
 		return difference(
