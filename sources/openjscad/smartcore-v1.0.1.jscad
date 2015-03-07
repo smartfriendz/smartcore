@@ -85,7 +85,7 @@ function getParameterDefinitions() {
     { name: '_wallThickness', caption: 'Box wood thickness:', type: 'int', initial: 10 },
     { name: '_XYrodsDiam', caption: 'X Y Rods diameter (6 or 8 ):', type: 'int', initial: 6},
     { name: '_ZrodsDiam', caption: 'Z Rods diameter (6,8,10,12):', type: 'int', initial: 8},
-    { name: '_ZrodsOption', caption: 'Z threaded rods:', type: 'choice', initial: 0, values:[1,0],captions: ["true", "false"]},
+    { name: '_ZrodsOption', caption: 'Z threaded rods:', type: 'choice', initial: 1, values:[1,0],captions: ["true", "false"]},
     
     
     {name: '_nemaXYZ', 
@@ -147,8 +147,8 @@ function zTop(){
         );
     }*/
     
-	if (_ZrodsOption===1) {
-		return union(
+    if (_ZrodsOption===1) {
+    	return union(
 			difference(
 				zTopBase(width, depth, height),
 				// bearing hole
@@ -1023,11 +1023,11 @@ function _rods(){
         // rod y right
         cylinder({r:_XYrodsDiam/2,h:YrodLength,fn:_globalResolution}).rotateX(90).translate([_globalWidth/2-20,_globalDepth/2-10,_globalHeight-offsetFromTopY]).setColor(0.3,0.3,0.3),
         //rod Z left
-        cylinder({r:_ZrodsDiam/2,h:ZrodLength,fn:_globalResolution}).translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,10]).setColor(0.3,0.3,0.3),
+        cylinder({r:_ZrodsDiam/2,h:ZrodLength,fn:_globalResolution}).translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,10 +(_ZrodsOption*25)]).setColor(0.3,0.3,0.3),
         //rod Z left bearing
         cylinder({r:_ZlmDiam/2,h:50,fn:_globalResolution}).translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-40]).setColor(0.5,0.5,0.5),
         // rod z right
-        cylinder({r:_ZrodsDiam/2,h:ZrodLength,fn:_globalResolution}).translate([_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,10]).setColor(0.3,0.3,0.3),
+        cylinder({r:_ZrodsDiam/2,h:ZrodLength,fn:_globalResolution}).translate([_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,10 +(_ZrodsOption*25)]).setColor(0.3,0.3,0.3),
         // rod z right bearing
         cylinder({r:_ZlmDiam/2,h:50,fn:_globalResolution}).translate([_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-40]).setColor(0.5,0.5,0.5)
         // support bed *4
@@ -1466,22 +1466,34 @@ switch(output){
             endstop_meca().rotateY(-90).translate([-_globalWidth/2+43,XaxisOffset-15,_globalHeight-52]).setColor(0.2,0.2,0.2),
             
             headLeft().translate([headoffset,XaxisOffset,_globalHeight-28]),
-            headRight().translate([headoffset+32,XaxisOffset,_globalHeight-28]),
-            // Z stage 
-            _nema().rotateX(-90).translate([-_nemaXYZ/2,_globalDepth/2-_wallThickness-_nemaXYZ-20,_wallThickness+_nemaXYZ]),
-            zTop().translate([0,_globalDepth/2-_wallThickness,_globalHeight-35]),
-            zBottom().translate([0,_globalDepth/2-_wallThickness,_wallThickness]),
-            //slideZ().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-40]),
-            //slideZ().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-10]),
-            //slideZsupport().translate([-_ZrodsWidth/2-_ZlmDiam/2-14-7,_globalDepth/2-_wallThickness-68,_globalHeight/2-45]),
-            //slideZsupport().translate([_ZrodsWidth/2+_ZlmDiam/2+14,_globalDepth/2-_wallThickness-68,_globalHeight/2-45]),
+            headRight().translate([headoffset+32,XaxisOffset,_globalHeight-28])
+            ];
             
-            slideZ2().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-30]),
-
-            _bed().translate([-_printableWidth/4,-_printableDepth/2,_globalHeight/2+10]),
-
-                ];
-
+            // Z stage 
+            if (_ZrodsOption === 1) {
+                res.push(_nema().rotateX(0).translate([-_nemaXYZ/2,_globalDepth/2-_nemaXYZ-1,0]));
+                res.push(zTop().translate([0,_globalDepth/2-_wallThickness,_globalHeight-10]));
+                res.push(zBottom().translate([0,_globalDepth/2-_wallThickness,_nemaXYZ+4]));
+                
+                res.push(slideZ2().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-30]));
+    
+                res.push(_bed().translate([-_printableWidth/4,-_printableDepth/2,_globalHeight/2+10]));
+                
+            } else {
+               res.push(_nema().rotateX(-90).translate([-_nemaXYZ/2,_globalDepth/2-_wallThickness-_nemaXYZ-20,_wallThickness+_nemaXYZ]));
+                res.push(zTop().translate([0,_globalDepth/2-_wallThickness,_globalHeight-35]));
+                res.push(zBottom().translate([0,_globalDepth/2-_wallThickness,_wallThickness]));
+                //res.push(slideZ().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-40]));
+                //res.push(slideZ().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-10]));
+                //res.push(slideZsupport().translate([-_ZrodsWidth/2-_ZlmDiam/2-14-7,_globalDepth/2-_wallThickness-68,_globalHeight/2-45]));
+                //res.push(slideZsupport().translate([_ZrodsWidth/2+_ZlmDiam/2+14,_globalDepth/2-_wallThickness-68,_globalHeight/2-45]));
+                
+                res.push(slideZ2().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-30]));
+    
+                res.push(_bed().translate([-_printableWidth/4,-_printableDepth/2,_globalHeight/2+10]));
+    
+            }
+            
             //bowden
             if(_extrusionType==1){
                 //res.push(JheadAttach().translate([headoffset-12,XaxisOffset-17,_globalHeight+6]));
