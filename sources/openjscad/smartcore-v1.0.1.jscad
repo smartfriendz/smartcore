@@ -85,7 +85,7 @@ function getParameterDefinitions() {
     { name: '_wallThickness', caption: 'Box wood thickness:', type: 'int', initial: 10 },
     { name: '_XYrodsDiam', caption: 'X Y Rods diameter (6 or 8 ):', type: 'int', initial: 6},
     { name: '_ZrodsDiam', caption: 'Z Rods diameter (6,8,10,12):', type: 'int', initial: 8},
-    { name: '_ZrodsOption', caption: 'Z threaded rods:', type: 'choice', initial: 1, values:[1,0],captions: ["true", "false"]},
+    { name: '_ZrodsOption', caption: 'Z threaded rods:', type: 'choice', initial: 0, values:[0,1,2],captions: ["false", "true", "true-2sides"]},
     
     
     {name: '_nemaXYZ', 
@@ -147,9 +147,9 @@ function zTop(){
         );
     }*/
     
-    if (_ZrodsOption===1) {
-    	return union(
-			difference(
+    if (_ZrodsOption>0) {
+        return union(
+        	difference(
 				zTopBase(width, depth, height),
 				// bearing hole
 				union(
@@ -183,7 +183,7 @@ function zBottom(){
     var depth = 42;
 
 	
-	if (_ZrodsOption===1) {
+	if (_ZrodsOption>0) {
 		return difference(
 			//main
 			union(			
@@ -263,7 +263,7 @@ function slideZ2(){
     var insideWidth = 35;
     var nutRadius = 14.5/2;
 	
-	if (_ZrodsOption===1) {
+	if (_ZrodsOption>0) {
 		return difference(
 			//main form
 			union(
@@ -1006,7 +1006,7 @@ function wallSizeText(){
     )
 }
 
-function _rods(){
+function _rodsXY() {
     var offsetFromTopY = 16;
     var offsetFromTopX = -5;
     return union(
@@ -1021,21 +1021,51 @@ function _rods(){
         // rod y left bearing
         cylinder({r:_XYlmDiam/2,h:50,fn:_globalResolution}).rotateX(90).translate([-_globalWidth/2+20,90,_globalHeight-offsetFromTopY]).setColor(0.6,0.6,0.6),
         // rod y right
-        cylinder({r:_XYrodsDiam/2,h:YrodLength,fn:_globalResolution}).rotateX(90).translate([_globalWidth/2-20,_globalDepth/2-10,_globalHeight-offsetFromTopY]).setColor(0.3,0.3,0.3),
-        //rod Z left
-        cylinder({r:_ZrodsDiam/2,h:ZrodLength,fn:_globalResolution}).translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,10 +(_ZrodsOption*25)]).setColor(0.3,0.3,0.3),
-        //rod Z left bearing
-        cylinder({r:_ZlmDiam/2,h:50,fn:_globalResolution}).translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-40]).setColor(0.5,0.5,0.5),
-        // rod z right
-        cylinder({r:_ZrodsDiam/2,h:ZrodLength,fn:_globalResolution}).translate([_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,10 +(_ZrodsOption*25)]).setColor(0.3,0.3,0.3),
-        // rod z right bearing
-        cylinder({r:_ZlmDiam/2,h:50,fn:_globalResolution}).translate([_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-40]).setColor(0.5,0.5,0.5)
-        // support bed *4
-        //cylinder({r:_ZrodsDiam/2,h:_printableDepth}).rotateX(90).translate([-_ZrodsWidth/2,_globalDepth/2-25,_globalHeight/2]).setColor(0.5,0.5,0.5),
-        //cylinder({r:_ZrodsDiam/2,h:_printableDepth}).rotateX(90).translate([_ZrodsWidth/2,_globalDepth/2-25,_globalHeight/2]).setColor(0.5,0.5,0.5),
-        //cylinder({r:_ZrodsDiam/2,h:_printableDepth}).rotateX(83).rotateZ(5).translate([-_ZrodsWidth/2,_globalDepth/2-25,_globalHeight/2-30]).setColor(0.5,0.5,0.5),
-        //cylinder({r:_ZrodsDiam/2,h:_printableDepth}).rotateX(83).rotateZ(-5).translate([_ZrodsWidth/2,_globalDepth/2-25,_globalHeight/2-30]).setColor(0.5,0.5,0.5)
-    );
+        cylinder({r:_XYrodsDiam/2,h:YrodLength,fn:_globalResolution}).rotateX(90).translate([_globalWidth/2-20,_globalDepth/2-10,_globalHeight-offsetFromTopY]).setColor(0.3,0.3,0.3)
+        );    
+}
+
+function _rodsZ() {  
+    if (_ZrodsOption === 0) {
+
+	//rod Z left
+        return union(
+            cylinder({r:_ZrodsDiam/2,h:ZrodLength,fn:_globalResolution}).translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,10 +(_ZrodsOption*25)]).setColor(0.3,0.3,0.3),
+            //rod Z left bearing
+            cylinder({r:_ZlmDiam/2,h:50,fn:_globalResolution}).translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-40]).setColor(0.5,0.5,0.5),
+            // rod z right
+            cylinder({r:_ZrodsDiam/2,h:ZrodLength,fn:_globalResolution}).translate([_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,10 +(_ZrodsOption*25)]).setColor(0.3,0.3,0.3),
+            // rod z right bearing
+            cylinder({r:_ZlmDiam/2,h:50,fn:_globalResolution}).translate([_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-40]).setColor(0.5,0.5,0.5)
+            // support bed *4
+            //cylinder({r:_ZrodsDiam/2,h:_printableDepth}).rotateX(90).translate([-_ZrodsWidth/2,_globalDepth/2-25,_globalHeight/2]).setColor(0.5,0.5,0.5),
+            //cylinder({r:_ZrodsDiam/2,h:_printableDepth}).rotateX(90).translate([_ZrodsWidth/2,_globalDepth/2-25,_globalHeight/2]).setColor(0.5,0.5,0.5),
+            //cylinder({r:_ZrodsDiam/2,h:_printableDepth}).rotateX(83).rotateZ(5).translate([-_ZrodsWidth/2,_globalDepth/2-25,_globalHeight/2-30]).setColor(0.5,0.5,0.5),
+            //cylinder({r:_ZrodsDiam/2,h:_printableDepth}).rotateX(83).rotateZ(-5).translate([_ZrodsWidth/2,_globalDepth/2-25,_globalHeight/2-30]).setColor(0.5,0.5,0.5)
+        );
+    } else {
+        var sideZrods = union(
+            //rod Z left
+            cylinder({r:_ZrodsDiam/2,h:ZrodLength,fn:_globalResolution}).translate([-_ZrodsWidth/2,-_wallThickness-2,0]).setColor(0.3,0.3,0.3),
+            //rod Z left bearing
+            cylinder({r:_ZlmDiam/2,h:50,fn:_globalResolution}).translate([-_ZrodsWidth/2,-_wallThickness-2,_globalHeight/2-40]).setColor(0.5,0.5,0.5),
+            // rod z right
+            cylinder({r:_ZrodsDiam/2,h:ZrodLength,fn:_globalResolution}).translate([_ZrodsWidth/2,-_wallThickness-2,0]).setColor(0.3,0.3,0.3),
+            // rod z right bearing
+            cylinder({r:_ZlmDiam/2,h:50,fn:_globalResolution}).translate([_ZrodsWidth/2,-_wallThickness-2,_globalHeight/2-40]).setColor(0.5,0.5,0.5)
+        );
+		if (_ZrodsOption === 1) {
+			return union(sideZrods.translate([0,_globalDepth/2-2,0]));
+		} else {
+			return union(
+				sideZrods.rotateZ(-90).translate([_globalWidth/2-2,0,0]), 
+				sideZrods.rotateZ(90).translate([-_globalWidth/2+2,0,0])
+			);
+		}
+    }
+}
+function _rods() {
+    return union(_rodsXY(),_rodsZ());    	
 }
 
 function rodsLengthText(){
@@ -1407,7 +1437,11 @@ function main(params){
 
     XrodLength = _printableWidth + 55; // 40: slideY width , 3: offset slideY from wall.
     YrodLength = _printableDepth + 65; // 5: rod support inside parts.
-    ZrodLength = _printableHeight + 100;
+	if (_ZrodsOption === 0){
+		ZrodLength = _printableHeight + 100;
+	} else {
+		ZrodLength = _printableHeight + 110;
+	}
 
 
     echo("wood depth:"+_globalDepth + " width:"+_globalWidth+" height:"+_globalHeight);
@@ -1470,14 +1504,21 @@ switch(output){
             ];
             
             // Z stage 
-            if (_ZrodsOption === 1) {
-                res.push(_nema().rotateX(0).translate([-_nemaXYZ/2,_globalDepth/2-_nemaXYZ-1,0]));
-                res.push(zTop().translate([0,_globalDepth/2-_wallThickness,_globalHeight-10]));
-                res.push(zBottom().translate([0,_globalDepth/2-_wallThickness,_nemaXYZ+4]));
+            if (_ZrodsOption > 0) { 
                 
-                res.push(slideZ2().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-2,_globalHeight/2-30]));
-    
-                res.push(_bed().translate([-_printableWidth/4,-_printableDepth/2,_globalHeight/2+10]));
+                zres = new Array();                    
+                zres.push(_nema().rotateX(0).translate([-_nemaXYZ/2,_globalDepth/2-_nemaXYZ-1,0]));
+                zres.push(zTop().translate([0,_globalDepth/2-_wallThickness,_globalHeight-35]));
+                zres.push(zBottom().translate([0,_globalDepth/2-_wallThickness,_nemaXYZ+4]));                    
+                zres.push(slideZ2().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-4,_globalHeight/2-30]));        
+                zres.push(_bed().translate([-_printableWidth/4,-_printableDepth/2,_globalHeight/2+10]));                    
+                
+                if (_ZrodsOption===1) {
+                    res.push(union(zres));
+                } else if (_ZrodsOption===2) {                    
+                    res.push(union(zres).rotateZ(90).translate([-_globalWidth/2+_globalDepth/2,0,0]));
+                    res.push(union(zres).rotateZ(-90).translate([_globalWidth/2-_globalDepth/2,0,0]));
+                }
                 
             } else {
                res.push(_nema().rotateX(-90).translate([-_nemaXYZ/2,_globalDepth/2-_wallThickness-_nemaXYZ-20,_wallThickness+_nemaXYZ]));
@@ -1644,3 +1685,4 @@ return res;
 
 }
 
+ 
