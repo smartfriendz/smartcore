@@ -54,7 +54,7 @@ var output; // show hide objects  from output choosen in the parameters.
 
 function getParameterDefinitions() {
   return [
-  { name: '_version', caption: 'Version', type: 'text', initial: "1.0.6 mar 6 2015" },
+  { name: '_version', caption: 'Version', type: 'text', initial: "1.0.7 mar 10 2015" },
   { 
         name: '_output', 
         caption: 'What to show :', 
