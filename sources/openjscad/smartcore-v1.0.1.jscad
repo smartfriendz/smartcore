@@ -54,7 +54,7 @@ var output; // show hide objects  from output choosen in the parameters.
 
 function getParameterDefinitions() {
   return [
-  { name: '_version', caption: 'Version', type: 'text', initial: "1.0.8 mar 12 2015" },
+  { name: '_version', caption: 'Version', type: 'text', initial: "1.0.9 mar 13 2015" },
   { 
         name: '_output', 
         caption: 'What to show :', 
@@ -138,7 +138,7 @@ function zTop(){
     var width = _ZrodsWidth+_ZrodsDiam+(_rodsSupportThickness*2)+26;
     var height = 12;
     var depth = 24;
-    var insideWidth = 25;
+    var insideWidth = 28;
     /* var bearings=cube({size:0});
 
     if(output==1){
@@ -1622,7 +1622,7 @@ switch(output){
         res = [slideY()];
     break;
     case 8:
-        res = [zTop().translate([0,0,80]),slideZ2().translate([-_ZrodsWidth/2,-2,20]),zBottom()];
+        res = [zTop()];
     break;
     case 9:
         res = zBottom();
