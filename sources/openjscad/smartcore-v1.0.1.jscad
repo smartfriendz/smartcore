@@ -59,7 +59,7 @@ function getParameterDefinitions() {
         name: '_output', 
         caption: 'What to show :', 
         type: 'choice', 
-        values: [0,1,2,3,4,-1,5,6,7,8,9,10,11,12], 
+        values: [0,1,2,3,4,-1,5,6,7,8,9,10,11,12,13], 
         initial: 1, 
         captions: ["-----", //0
                     "All printer assembly", //1
@@ -73,8 +73,9 @@ function getParameterDefinitions() {
                     "z top", //8
                     "z bottom", //9
                     "z slide", //10
-                    "head", //11
-                    "extruder" //12
+                    "z assembly", // 11
+                    "head", //12
+                    "extruder" //13
                     ]
     },
     { name: '_globalResolution', caption: 'output resolution (16, 24, 32)', type: 'int', initial: 8 },   
@@ -111,9 +112,8 @@ function getParameterDefinitions() {
 
 // -----------------  printed elements 
 
-
-
 function zTopBase(width, depth, height) { 
+	var adjustment = (_ZrodsOption>0)? 15 : 13;
     return difference(
             //main
             cube({size:[width,depth,height],center:true}).translate([0,-1,0]),
@@ -126,9 +126,9 @@ function zTopBase(width, depth, height) {
             //screw right
             slottedHole(4,8,depth).rotateX(90).rotateY(90).translate([(width)/2-9,20,0]),
             // z rod left
-            cylinder({r:_ZrodsDiam/2,h:height,fn:_globalResolution}).translate([-_ZrodsWidth/2,depth/2-15,-height/2]),
+            cylinder({r:_ZrodsDiam/2,h:height,fn:_globalResolution}).translate([-_ZrodsWidth/2,depth/2-adjustment,-height/2]),
             //z rod right
-            cylinder({r:_ZrodsDiam/2,h:height,fn:_globalResolution}).translate([_ZrodsWidth/2,depth/2-15,-height/2]),
+            cylinder({r:_ZrodsDiam/2,h:height,fn:_globalResolution}).translate([_ZrodsWidth/2,depth/2-adjustment,-height/2]),
             // chamfer
             roundBoolean2(10,height,"bl").rotateX(90).rotateZ(-90).translate([-width/2+22,-depth/2+9,-height/2]),
             roundBoolean2(10,height,"bl").rotateX(90).translate([width/2-22,-depth/2+9,-height/2])
@@ -137,7 +137,7 @@ function zTopBase(width, depth, height) {
 function zTop(){
     var width = _ZrodsWidth+_ZrodsDiam+(_rodsSupportThickness*2)+26;
     var height = 12;
-    var depth = 24;
+    var depth = 30;
     var insideWidth = 28;
     /* var bearings=cube({size:0});
 
@@ -155,14 +155,14 @@ function zTop(){
 				union(
 					bearing608z(),
 					cylinder({r:12/2, h:height*4,fn: _globalResolution}).translate([0,0,-8])
-				).translate([0,-12,-1])
+				).translate([0,-10,-1])
 				
 			)
 		);
 	} else {
 		return union(
 			difference(
-				zTopBase(width, depth, height),
+				zTopBase(width, depth, height).translate([0,-4,0]),
 				// inside form
 				difference(
 					cube({size:[insideWidth,8,height],center:true}).translate([3,-5.5,0]),
@@ -1477,10 +1477,12 @@ switch(output){
             // Z stage 
             if (_ZrodsOption > 0) { 
                 
-                zres = new Array();                    
-                zres.push(_nema().rotateX(0).translate([-_nemaXYZ/2,_globalDepth/2-_nemaXYZ-1,0]));
-                zres.push(zTop().translate([0,_globalDepth/2-_wallThickness,_globalHeight-35]));
-                zres.push(zBottom().translate([0,_globalDepth/2-_wallThickness,_nemaXYZ+4]));                    
+                zres = new Array();
+                // z threaded rod
+                zres.push(cylinder({r:_ZrodsDiam/2,h:ZrodLength-_nemaXYZ-20,fn:_globalResolution}).translate([0,_globalDepth/2-_wallThickness-14,20+_nemaXYZ]).setColor(0.9,0.3,0.3));
+                zres.push(_nema().rotateX(0).translate([-_nemaXYZ/2,_globalDepth/2-_nemaXYZ-3,0]));
+                zres.push(zTop().translate([0,_globalDepth/2-_wallThickness-4,_globalHeight-35]));
+                zres.push(zBottom().translate([0,_globalDepth/2-_wallThickness-2,_nemaXYZ+4]));                    
                 zres.push(slideZ2().translate([-_ZrodsWidth/2,_globalDepth/2-_wallThickness-4,_globalHeight/2-30]));        
                 zres.push(_bed().translate([-_printableWidth/4,-_printableDepth/2,_globalHeight/2+10]));                    
                 
@@ -1627,22 +1629,39 @@ switch(output){
     case 9:
         res = zBottom();
     break;
-    case 10:
-        res = [
-        slideZ2()
+    case 10: 
+        res = [slideZ2()
         //slideZsupport().translate([40,0,0]),
-        //extraSupportBed().translate([0,-50,0])
-            /*slideZ2().translate([_ZrodsWidth/2-1,_globalDepth/2-_wallThickness-70,_globalHeight/2-40]),
-            slideZBearingsSupport().mirroredX().translate([_ZrodsWidth/2-2,_globalDepth/2-_wallThickness-15,_globalHeight/2-40]),
-            slideZ2().mirroredX().translate([-_ZrodsWidth/2+1,_globalDepth/2-_wallThickness-70,_globalHeight/2-40]),
-            slideZBearingsSupport().translate([-_ZrodsWidth/2+2,_globalDepth/2-_wallThickness-15,_globalHeight/2-40]),
-            slideZBeltAttach().translate([-_ZrodsWidth/2+13,_globalDepth/2-_wallThickness-15,_globalHeight/2-40])*/
-            ];
-    break;
+            //extraSupportBed().translate([0,-50,0])
+                /*slideZ2().translate([_ZrodsWidth/2-1,_globalDepth/2-_wallThickness-70,_globalHeight/2-40]),
+                slideZBearingsSupport().mirroredX().translate([_ZrodsWidth/2-2,_globalDepth/2-_wallThickness-15,_globalHeight/2-40]),
+                slideZ2().mirroredX().translate([-_ZrodsWidth/2+1,_globalDepth/2-_wallThickness-70,_globalHeight/2-40]),
+                slideZBearingsSupport().translate([-_ZrodsWidth/2+2,_globalDepth/2-_wallThickness-15,_globalHeight/2-40]),
+                slideZBeltAttach().translate([-_ZrodsWidth/2+13,_globalDepth/2-_wallThickness-15,_globalHeight/2-40])*/
+        ];
+        break;
     case 11:
-        res = [headLeft(),headRight().translate([0,60,0])];
+        if (_ZrodsOption > 0 ) {
+            res = [
+            cylinder({r:_ZrodsDiam/2,h:ZrodLength-30,fn:_globalResolution}).translate([-_ZrodsWidth/2+30,-13,-155]).setColor(0.9,0.3,0.3),
+            _rodsZ().translate([0,-_globalDepth/2+_wallThickness+1,-130]),
+            slideZ2().translate([-30,-3,-40]),
+            zTop().translate([0,-3,90]),
+            zBottom().translate([0,-1,-140])
+            ];
+        } else {
+            res = [
+                _rodsZ().translate([0,-_globalDepth/2+_wallThickness+1,-115]),
+                slideZ2().translate([-30,-1,0]),
+                zTop().translate([0,1,100]),
+                zBottom().translate([0,1,-100])
+            ];
+        }
     break;
     case 12:
+        res = [headLeft(),headRight().translate([0,60,0])];
+    break;
+    case 13:
         res = [ extruder(_extrusionType,0),extruder(_extrusionType,1).rotateX(180).translate([60,0,0])
         ];
     break;
