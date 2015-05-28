@@ -53,7 +53,7 @@ var output; // show hide objects  from output choosen in the parameters.
 
 function getParameterDefinitions() {
   return [
-  { name: '_version', caption: 'Version', type: 'text', initial: "1.2.1 may 17 2015" },
+  { name: '_version', caption: 'Version', type: 'text', initial: "1.2.2 may 28 2015" },
   { 
         name: '_output', 
         caption: 'What to show :', 
@@ -292,10 +292,10 @@ var mesh;
 
         ),
         // cut bearings support part
-        cube({size:[10,Y,30]}).translate([15,0,20]),
+        cube({size:[10,Y,30]}).translate([10,0,20]),
         // and add some chamfreins
-        roundBoolean2(3,20,"tr").rotateX(-90).translate([25,0,40]),
-        roundBoolean2(3,20,"br").rotateX(-90).translate([25,Y-3,40]),
+        roundBoolean2(3,20,"tr").rotateX(-90).translate([20,0,40]),
+        roundBoolean2(3,20,"br").rotateX(-90).translate([20,Y-3,40]),
 
         // long bearing hole
         cylinder({r:4.1,h:Z-bearingsOffsetZ,fn:_globalResolution}).translate([bearingHoleOffsetX,Y/2,bearingsOffsetZ]),
@@ -308,10 +308,10 @@ var mesh;
         cube({size:[10,Y+10,1]}).translate([0,-10,4.5]),
         
         // Xrods hole top
-        cylinder({r:_XYrodsDiam/2,h:10,fn:_globalResolution}).rotateY(90).translate([X+5,Y/2,Z]),
+        cylinder({r:_XYrodsDiam/2,h:15,fn:_globalResolution}).rotateY(90).translate([X+3,Y/2,Z]),
 
         // Xrods hole bottom
-        cylinder({r:_XYrodsDiam/2,h:10,fn:_globalResolution}).rotateY(90).translate([X+5,Y/2,0]),
+        cylinder({r:_XYrodsDiam/2,h:15,fn:_globalResolution}).rotateY(90).translate([X+3,Y/2,0]),
 
         // Xrods slice bottom top 
         //cube({size:[13,1,10]}).translate([X+2,Y/2,-10]),
@@ -337,7 +337,7 @@ var mesh;
                     cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,-5]),
                     cube({size:[13,1,12]}).translate([X+2,Y/2,-12]),
                     // Xrods hole bottom
-                    cylinder({r:_XYrodsDiam/2,h:10,fn:_globalResolution}).rotateY(90).translate([X+5,Y/2,0]),
+                    cylinder({r:_XYrodsDiam/2,h:12,fn:_globalResolution}).rotateY(90).translate([X+3,Y/2,0]),
                     //extra remove
                     cylinder({r:20,h:10,fn:_globalResolution}).rotateX(-90).rotateZ(90).translate([X+15,20,-28])
                 )
@@ -357,7 +357,7 @@ var mesh;
                 cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,-5]),
                 cube({size:[13,1,10]}).translate([X+2,Y/2,-10]),
                 // Xrods hole bottom
-                cylinder({r:_XYrodsDiam/2,h:10,fn:_globalResolution}).rotateY(90).translate([X+5,Y/2,0])
+                cylinder({r:_XYrodsDiam/2,h:12,fn:_globalResolution}).rotateY(90).translate([X+5,Y/2,0])
                 ),
                 // extra part for endstop Y click
                 cube({size:[7,Y-10,10]}).translate([0,Y-(Y-10),-8])
@@ -432,7 +432,9 @@ function head(){
          cylinder({r:1.3,h:22,fn:_globalResolution}).rotateX(-90).translate([36,0,28]),
          
         // screw to fix endstop X under 
-         cylinder({r:1.6,h:10,fn:_globalResolution}).translate([3,-2,5])   
+         cylinder({r:1.6,h:10,fn:_globalResolution}).translate([3,-2,5]) ,
+         // screw to fix bottom Xrod
+         cylinder({r:1.6,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2,0,9])   
 
     );
     return mesh;
