@@ -334,7 +334,7 @@ var mesh;
                 // extra part for endstop X to click on 
                 difference(
                     cube({size:[10,Y+5,14]}).translate([X+5,-5,-14]),
-                    cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,-5]),
+                    cylinder({r:1.3,h:Y+10,fn:_globalResolution}).rotateX(-90).translate([X+10,-6,-5]),
                     cube({size:[13,1,12]}).translate([X+2,Y/2,-12]),
                     // Xrods hole bottom
                     cylinder({r:_XYrodsDiam/2,h:12,fn:_globalResolution}).rotateY(90).translate([X+3,Y/2,0]),
