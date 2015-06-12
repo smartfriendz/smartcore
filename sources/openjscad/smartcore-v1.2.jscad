@@ -59,7 +59,7 @@ function getParameterDefinitions() {
         caption: 'What to show :', 
         type: 'choice', 
         values: [0,1,2,3,4,-1,5,6,7,8,9,10,11,12], 
-        initial: 1, 
+        initial: 11, 
         captions: ["-----", //0
                     "All printer assembly", //1
                     "printed parts plate", //2
@@ -385,9 +385,9 @@ var mesh;
 function head(){
     var mesh;
     var X = 50;
-    var Y = 20;
-    var Z = 52;
-    var zOffset = 6;
+    var Y = _XYlmDiam + 8;
+    var Z = _XYlmDiam + 40;
+    var zOffset = 12 -_XYlmDiam /2;
     var xrodOffset = 40;
     var washer = (X-38)/3; // 19 = lm6 length 
 
@@ -398,11 +398,11 @@ function head(){
             cube({size:[X,Y,Z]}).translate([0,0,zOffset]),
             //gt2 holders 
             Gt2HolderSuspendedLeft(3).translate([0,-5,27]),
-            Gt2HolderSuspendedRight(3).translate([0,17,37]),
+            Gt2HolderSuspendedRight(3).translate([0,_XYlmDiam +5,37]),
             // support for endstop X
             cube({size:[10,10,6]}).translate([0,-7,zOffset]),
             Gt2HolderSuspendedLeft(3).translate([X-10,-5,37]),
-            Gt2HolderSuspendedRight(3).translate([X-10,17,27]) 
+            Gt2HolderSuspendedRight(3).translate([X-10,_XYlmDiam +5,27]) 
 
         ),
         //rod x holes
