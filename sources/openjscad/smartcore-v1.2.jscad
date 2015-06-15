@@ -59,7 +59,7 @@ function getParameterDefinitions() {
         caption: 'What to show :', 
         type: 'choice', 
         values: [0,1,2,3,4,-1,5,6,7,8,9,10,11,12], 
-        initial: 1, 
+        initial: 7, 
         captions: ["-----", //0
                     "All printer assembly", //1
                     "printed parts plate", //2
@@ -321,8 +321,8 @@ var mesh;
         cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,Z+5]),
 
         // screws for rod Y support
-        cylinder({r:1.3,h:10,fn:_globalResolution}).translate([3,-5,0]),
-        cylinder({r:1.3,h:10,fn:_globalResolution}).translate([3,15,0])
+        cylinder({r:1.3,h:20,fn:_globalResolution}).translate([3,-5,0]),
+        cylinder({r:1.3,h:30,fn:_globalResolution}).translate([3,15,-20])
         
 
     );
@@ -360,7 +360,10 @@ var mesh;
                 cylinder({r:_XYrodsDiam/2,h:12,fn:_globalResolution}).rotateY(90).translate([X+5,Y/2,0])
                 ),
                 // extra part for endstop Y click
-                cube({size:[7,Y-10,10]}).translate([0,Y-(Y-10),-8])
+                difference(
+					cube({size:[7,Y-10,10]}).translate([0,Y-(Y-10),-8]),
+					cylinder({r:1.3,h:30,fn:_globalResolution}).translate([3,15,-20])
+				)
         
                 );
     }
