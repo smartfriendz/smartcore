@@ -24,8 +24,10 @@ var _printableHeight;
 var _wallThickness; // box wood thickness
 var _XYrodsDiam; // usually 6 or 8 .. or 10? 
 var _XYlmDiam; // lm6uu, lm8uu ... will be calculated from rods diam
+var _XYlmLength;
 var _ZrodsDiam; // usually 6, 8, 10 or 12 
 var _ZlmDiam; // lm6uu, lm8uu ... will be calculated from rods diam
+var _ZlmLength;
 var _nemaXYZ;  // nema 14 , nema 17 
 var _XrodsWidth=60; //space between rods on X axis
 var _ZrodsWidth=60; //space between rods on Z axis
@@ -59,7 +61,7 @@ function getParameterDefinitions() {
         caption: 'What to show :', 
         type: 'choice', 
         values: [0,1,2,3,4,-1,5,6,7,8,9,10,11,12], 
-        initial: 7, 
+        initial: 1, 
         captions: ["-----", //0
                     "All printer assembly", //1
                     "printed parts plate", //2
@@ -387,12 +389,13 @@ var mesh;
 
 function head(){
     var mesh;
-    var X = 50;
+    var X = (2*_XYlmLength)+12;
     var Y = _XYlmDiam + 8;
     var Z = _XYlmDiam + 40;
     var zOffset = 12 -_XYlmDiam /2;
     var xrodOffset = 40;
-    var washer = (X-38)/3; // 19 = lm6 length 
+    var washer = (X-(2*_XYlmLength))/3; 
+    var headAttachHolesXwidth = 22;
 
 
     mesh = difference(
@@ -419,20 +422,20 @@ function head(){
         union(
             cylinder({r:_XYlmDiam/2-1,h:washer,fn:_globalResolution}).rotateY(90).translate([0,Y/2,15+xrodOffset-1]),
             cube({size:[washer,_XYlmDiam-2,10]}).translate([0,Y/2-_XYlmDiam/2+1,15+xrodOffset-1]),
-            cylinder({r:_XYlmDiam/2,h:19.1,fn:_globalResolution}).rotateY(90).translate([washer,Y/2,15+xrodOffset-1]),
-            cube({size:[19.1,_XYlmDiam,10]}).translate([washer,Y/2-_XYlmDiam/2,15+xrodOffset-1]),
-            cylinder({r:_XYlmDiam/2-1,h:washer,fn:_globalResolution}).rotateY(90).translate([washer+19.1,Y/2,15+xrodOffset-1]),
-            cube({size:[washer,_XYlmDiam-2,10]}).translate([washer+19.1,Y/2-_XYlmDiam/2+1,15+xrodOffset-1]),
-            cylinder({r:_XYlmDiam/2,h:19.1,fn:_globalResolution}).rotateY(90).translate([2*washer+19.1,Y/2,15+xrodOffset-1]),
-            cube({size:[19.1,_XYlmDiam,10]}).translate([2*washer+19.1,Y/2-_XYlmDiam/2,15+xrodOffset-1]),
-            cylinder({r:_XYlmDiam/2-1,h:washer,fn:_globalResolution}).rotateY(90).translate([2*washer+38.2,Y/2,15+xrodOffset-1]),
-            cube({size:[washer,_XYlmDiam-2,10]}).translate([2*washer+38.2,Y/2-_XYlmDiam/2+1,15+xrodOffset-1])
+            cylinder({r:_XYlmDiam/2,h:_XYlmLength,fn:_globalResolution}).rotateY(90).translate([washer,Y/2,15+xrodOffset-1]),
+            cube({size:[_XYlmLength,_XYlmDiam,10]}).translate([washer,Y/2-_XYlmDiam/2,15+xrodOffset-1]),
+            cylinder({r:_XYlmDiam/2-1,h:washer,fn:_globalResolution}).rotateY(90).translate([washer+_XYlmLength,Y/2,15+xrodOffset-1]),
+            cube({size:[washer,_XYlmDiam-2,10]}).translate([washer+_XYlmLength,Y/2-_XYlmDiam/2+1,15+xrodOffset-1]),
+            cylinder({r:_XYlmDiam/2,h:_XYlmLength,fn:_globalResolution}).rotateY(90).translate([2*washer+_XYlmLength,Y/2,15+xrodOffset-1]),
+            cube({size:[_XYlmLength,_XYlmDiam,10]}).translate([2*washer+_XYlmLength,Y/2-_XYlmDiam/2,15+xrodOffset-1]),
+            cylinder({r:_XYlmDiam/2-1,h:washer,fn:_globalResolution}).rotateY(90).translate([2*washer+2*_XYlmLength,Y/2,15+xrodOffset-1]),
+            cube({size:[washer,_XYlmDiam-2,10]}).translate([2*washer+2*_XYlmLength,Y/2-_XYlmDiam/2+1,15+xrodOffset-1])
             ),
         // head attach holes 
-         cylinder({r:1.3,h:22,fn:_globalResolution}).rotateX(-90).translate([14,0,40]),
-         cylinder({r:1.3,h:22,fn:_globalResolution}).rotateX(-90).translate([14,0,28]),
-         cylinder({r:1.3,h:22,fn:_globalResolution}).rotateX(-90).translate([36,0,40]),
-         cylinder({r:1.3,h:22,fn:_globalResolution}).rotateX(-90).translate([36,0,28]),
+         cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2-headAttachHolesXwidth/2,0,40]),
+         cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2-headAttachHolesXwidth/2,0,28]),
+         cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2+headAttachHolesXwidth/2,0,40]),
+         cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2+headAttachHolesXwidth/2,0,28]),
          
         // screw to fix endstop X under 
          cylinder({r:1.6,h:10,fn:_globalResolution}).translate([3,-2,5]) ,
@@ -1346,8 +1349,8 @@ function main(params){
     _nemaXYZ=parseInt(params._nemaXYZ);
     output=parseInt(params._output); 
     // update calculated values 
-    if(_XYrodsDiam==6){ _XYlmDiam = 12.2;}
-    if(_XYrodsDiam==8){ _XYlmDiam = 15.2;}
+    if(_XYrodsDiam==6){ _XYlmDiam = 12.2;_XYlmLength = 19.1;}
+    if(_XYrodsDiam==8){ _XYlmDiam = 15.2;_XYlmLength =24.1;}
     if(_ZrodsDiam==6){ _ZlmDiam = 12.2;}
     if(_ZrodsDiam==8){ _ZlmDiam = 15.2;}
     if(_ZrodsDiam==10){ _ZlmDiam = 19.2;}
