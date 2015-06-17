@@ -55,7 +55,7 @@ var output; // show hide objects  from output choosen in the parameters.
 
 function getParameterDefinitions() {
   return [
-  { name: '_version', caption: 'Version', type: 'text', initial: "1.2.3 june 12 2015" },
+  { name: '_version', caption: 'Version', type: 'text', initial: "1.2.4 june 17 2015" },
   { 
         name: '_output', 
         caption: 'What to show :', 
@@ -215,8 +215,8 @@ function slideZ2(){
                 cube({size:[side_form_size,10,height]}).translate([-side_form_size,-4,0]),
 
                 // extra forms front bearings holes
-                cube([16,70,height]).translate([-8,-65,0]),
-                cube([16,70,height]).translate([_ZrodsWidth-8,-65,0])
+                cube([16,90,height]).translate([-8,-85,0]),
+                cube([16,90,height]).translate([_ZrodsWidth-8,-85,0])
 
             ),
             // big hole middle
@@ -224,11 +224,11 @@ function slideZ2(){
             cylinder({r:5,h:50,fn:_globalResolution}).rotateX(90).translate([width/2+15,40,height/2-10]),
             cylinder({r:5,h:50,fn:_globalResolution}).rotateX(90).translate([width/2-10,40,height/2-10]),
             //  boolean front horizontal
-            cylinder({r:70,h:width+40,fn:_globalResolution}).rotateY(90).translate([-20,-70,-30]),
+            cylinder({r:80,h:width+40,fn:_globalResolution}).rotateY(90).translate([-20,-80,-40]),
             cylinder({r:5,h:width+40,fn:_globalResolution}).rotateY(90).translate([-20,-15,height-10]),
             // front form 
-            cube([12,70,height]).translate([-10,-85,-5]),
-            cube([12,70,height]).translate([_ZrodsWidth-2,-85,-5]),
+            cube([12,70,height]).translate([-10,-80,-5]),
+            cube([12,70,height]).translate([_ZrodsWidth-2,-80,-5]),
             // z rod left linear bearing lm
             cylinder({r:_ZlmDiam/2,h:height,fn:_globalResolution}).translate([0,0,0]),
             //z rod right linear bearing lm
@@ -243,9 +243,9 @@ function slideZ2(){
             cylinder({r:1.4,h:30,fn:_globalResolution}).rotateX(90).translate([-set_screw_offset,20,10]),
             // top holes
             cylinder({r:2,h:30,fn:_globalResolution}).translate([-4,-20,height-30]),
-            cylinder({r:2,h:30,fn:_globalResolution}).translate([_ZrodsWidth+2,-20,height-30]),
-            cylinder({r:2,h:30,fn:_globalResolution}).translate([-4,-55,height-30]),
-            cylinder({r:2,h:30,fn:_globalResolution}).translate([_ZrodsWidth+2,-55,height-30]),
+            cylinder({r:2,h:30,fn:_globalResolution}).translate([_ZrodsWidth+3,-20,height-30]),
+            cylinder({r:2,h:30,fn:_globalResolution}).translate([-4,-75,height-30]),
+            cylinder({r:2,h:30,fn:_globalResolution}).translate([_ZrodsWidth+3,-75,height-30]),
             // special hole in gt2 holder to be able to get the belt out .. but still printable vertically.
                 linear_extrude({height:20},polygon({points:[[0,0],[6,0],[4,10],[2,10]]})).rotateY(-90).translate([width/2+5,-10,height-15])
             );
@@ -499,7 +499,9 @@ function InductiveSensorSupport(){
             cube({size:[width,depth,height]}),
             // inductive support
             cube({size:[8,depth,30]}).translate([width-8,0,-25]),
-            cube({size:[35,depth+3,5]}).translate([width-8,0,-25])
+            cube({size:[35,depth+15,5]}).translate([width-8,0,-25])
+            
+            
         ),
         // jhead holes 
          cylinder({r:extDiam/2+0.1,h:3,fn:_globalResolution}).translate([width/2,depth,0]),
@@ -510,7 +512,10 @@ function InductiveSensorSupport(){
         cylinder({r:1.6,h:13,fn:_globalResolution}).rotateX(-90).translate([width/2+endxJheadAttachHolesWidth/2,0,height/2]),
 
          // inductive support hole
-         cylinder({r:9.2,h:height,fn:_globalResolution}).translate([width+15,depth,-25])
+         cylinder({r:9.3,h:height,fn:_globalResolution}).translate([width+15,depth+2,-25]),
+         // chamfer
+         roundBoolean2(17,10,"br").rotateX(-90).translate([width-8,depth-2,-18]),
+         roundBoolean2(17,10,"bl").rotateX(-90).translate([width+15,depth-2,-18])
 
     );
 }
@@ -1436,7 +1441,7 @@ switch(output){
             res.push(HeadSupportJhead().rotateZ(180).translate([headoffset+44,XaxisOffset,_globalHeight-14]).setColor(0.3,0.9,0.3));
             res.push(fakeJhead().translate([headoffset+23,XaxisOffset-15,_globalHeight-32]).setColor(0.2,0.2,0.2));
             // fake inductive sensor
-            res.push(cylinder({r:9,h:70,fn:_globalResolution}).translate([headoffset+62,XaxisOffset-12,_globalHeight-40]).setColor(0.2,0.2,0.2));
+            res.push(cylinder({r:9,h:70,fn:_globalResolution}).translate([headoffset+62,XaxisOffset-15,_globalHeight-40]).setColor(0.2,0.2,0.2));
             res.push(InductiveSensorSupport().translate([headoffset+1.5,XaxisOffset-30,_globalHeight+13]).setColor(0.3,0.9,0.3));
             
             // nema extruder
