@@ -307,7 +307,7 @@ var mesh;
         // rod Y bool
         cylinder({r:_XYlmDiam/2+0.1,h:Y+15,fn:_globalResolution}).rotateX(-90).translate([14,-15,5]),
         // rod Y support slice boolean 
-        cube({size:[10,Y+10,1]}).translate([0,-10,4.5]),
+        cube({size:[15,Y+10,1]}).translate([-4,-10,4.5]),
         
         // Xrods hole top
         cylinder({r:_XYrodsDiam/2,h:15,fn:_globalResolution}).rotateY(90).translate([X+3,Y/2,Z]),
@@ -323,8 +323,8 @@ var mesh;
         cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,Z+5]),
 
         // screws for rod Y support
-        cylinder({r:1.3,h:20,fn:_globalResolution}).translate([3,-5,0]),
-        cylinder({r:1.3,h:30,fn:_globalResolution}).translate([3,15,-20])
+        cylinder({r:1.3,h:20,fn:_globalResolution}).translate([3-(_XYlmDiam/4-3),-5,0]),
+        cylinder({r:1.3,h:30,fn:_globalResolution}).translate([3-(_XYlmDiam/4-3),15,-20])
         
 
     );
@@ -363,8 +363,8 @@ var mesh;
                 ),
                 // extra part for endstop Y click
                 difference(
-					cube({size:[7,Y-10,10]}).translate([0,Y-(Y-10),-8]),
-					cylinder({r:1.3,h:30,fn:_globalResolution}).translate([3,15,-20])
+					cube({size:[_XYlmDiam/2,Y-10,10]}).translate([0,Y-(Y-10),-8]),
+					cylinder({r:1.3,h:30,fn:_globalResolution}).translate([3-(_XYlmDiam/4-3),15,-20])
 				)
         
                 );
