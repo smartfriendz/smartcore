@@ -557,7 +557,7 @@ function motorXY(side){
         // base
         cube({size:[_nemaXY/2-5,_nemaXY,thickness+2]}),
         // wall support
-        cube({size:[9,_nemaXY,20]}).setColor("grey"),
+        cube({size:[9,_nemaXY,20]}).setColor(0.3,0.3,0.3),
         //top and back fix
         cube({size:[_wallThickness+9,_nemaXY,thickness]}).translate([-_wallThickness,0,20]),
         cube({size:[thickness,_nemaXY,20+thickness]}).translate([-_wallThickness-thickness,0,0]),
