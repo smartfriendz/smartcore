@@ -275,9 +275,9 @@ var mesh;
                 ),
             // rodx extra form on top and bottom to fix the rods
             //cube({size:[10,Y,5]}).translate([X+5,0,-5]),
-            cube({size:[10,Y,5]}).translate([X+5,0,Z]),
+            cube({size:[10,Y,(_XYrodsDiam/2)  + 2]}).translate([X+5,0,Z]),
             //cylinder({r:5,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,-5]),
-            cylinder({r:5,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,Z+5]),
+            cylinder({r:5,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,Z+(_XYrodsDiam/2)+2]),
             //rodx extra fillet 
             // fillet
              roundBoolean2(3,Y,"tl").translate([X+2,0,Z]),
@@ -317,10 +317,10 @@ var mesh;
 
         // Xrods slice bottom top 
         //cube({size:[13,1,10]}).translate([X+2,Y/2,-10]),
-        cube({size:[13,1,10]}).translate([X+2,Y/2,Z]),
+        cube({size:[13,1,8+(_XYrodsDiam/2)]}).translate([X+2,Y/2,Z]),
         
         // screws to fix rod X 
-        cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,Z+5]),
+        cylinder({r:1.3,h:Y+2,fn:_globalResolution}).rotateX(-90).translate([X+10,-1,Z+(_XYrodsDiam/2)  + 2]),
 
         // screws for rod Y support
         cylinder({r:1.3,h:20,fn:_globalResolution}).translate([3-(_XYlmDiam/4-3),-5,0]),
@@ -336,12 +336,16 @@ var mesh;
                 // extra part for endstop X to click on 
                 difference(
                     cube({size:[10,Y+5,14]}).translate([X+5,-5,-14]),
-                    cylinder({r:1.3,h:Y+10,fn:_globalResolution}).rotateX(-90).translate([X+10,-6,-5]),
-                    cube({size:[13,1,12]}).translate([X+2,Y/2,-12]),
+                    cylinder({r:1.3,h:Y+10,fn:_globalResolution}).rotateX(-90).translate([X+10,-6,-(_XYrodsDiam/2) -2]),
+
+                    // Rod pinch slicer
+                    cube({size:[13,1,10+(_XYrodsDiam/2)]}).translate([X+2,Y/2,-10-(_XYrodsDiam/2)]),
+
                     // Xrods hole bottom
                     cylinder({r:_XYrodsDiam/2,h:12,fn:_globalResolution}).rotateY(90).translate([X+3,Y/2,0]),
-                    //extra remove
-                    cylinder({r:20,h:10,fn:_globalResolution}).rotateX(-90).rotateZ(90).translate([X+15,20,-28])
+
+                    // Angle cutoff
+                    cylinder({r:20,h:10,fn:_globalResolution}).rotateX(-90).rotateZ(90).translate([X+15,20,-25-(_XYrodsDiam/2)])
                 )
         
                 );
@@ -356,8 +360,9 @@ var mesh;
                     cube({size:[10,Y,5]}).translate([X+5,0,-5]),
                     cylinder({r:5,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,-5])
                     ),
-                cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,-5]),
-                cube({size:[13,1,10]}).translate([X+2,Y/2,-10]),
+                cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,-(_XYrodsDiam/2)-2]),
+                cube({size:[13,1,7+(_XYrodsDiam/2)]}).translate([X+2,Y/2,-7-(_XYrodsDiam/2)]),
+
                 // Xrods hole bottom
                 cylinder({r:_XYrodsDiam/2,h:12,fn:_globalResolution}).rotateY(90).translate([X+5,Y/2,0])
                 ),
