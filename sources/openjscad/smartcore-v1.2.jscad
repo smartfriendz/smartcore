@@ -54,6 +54,7 @@ var outputPlateDepth = 180;
 var mk7Diam = 10;
 var beltXAddon = 120; // belt extra length over rod size - bearing guides and difference between bearing edge to end of rod
 var beltYAddon = 30; // belt extra length over y rod size - distance from motor pulley edge to Y rod mount and
+var _ZmotorXYPadding; // used to avoid an open rod support - for the motorXY part.
 
 // global for work
 var _bearingsDepth = 35; // hack.need to be cleaned. 
@@ -555,25 +556,25 @@ function motorXY(side){
     var mesh = difference(
     union(
         // base
-        cube({size:[_nemaXY/2-5,_nemaXY,thickness+2]}),
+        cube({size:[_nemaXY/2-5,_nemaXY,thickness+2+_ZmotorXYPadding]}),
         // wall support
-        cube({size:[9,_nemaXY,20]}).setColor(0.3,0.3,0.3),
+        cube({size:[9,_nemaXY,20+_ZmotorXYPadding]}).setColor(0.3,0.3,0.3),
         //top and back fix
-        cube({size:[_wallThickness+9,_nemaXY,thickness]}).translate([-_wallThickness,0,20]),
-        cube({size:[thickness,_nemaXY,20+thickness]}).translate([-_wallThickness-thickness,0,0]),
+        cube({size:[_wallThickness+9,_nemaXY,thickness]}).translate([-_wallThickness,0,20+_ZmotorXYPadding]),
+        cube({size:[thickness,_nemaXY,20+thickness+_ZmotorXYPadding]}).translate([-_wallThickness-thickness,0,0]),
         // rod support - half slotted hole
-        cylinder({r:_YrodsDiam/2+3,h:15,fn:_globalResolution}).rotateX(90).translate([20,_nemaXY,4]),
+        cylinder({r:_YrodsDiam/2+3,h:15,fn:_globalResolution}).rotateX(90).translate([20,_nemaXY,4+_ZmotorXYPadding]),
         cube({size:[20,15,_YrodsDiam/2+3]}).translate([_nemaXY/2+_YrodsDiam/2+1-25,_nemaXY-15,-1])
 
 
     ),
     nemaHole(_nemaXY).translate([_nemaXY/2,_nemaXY/2,-1]),
     // rod support hole
-    cylinder({r:_YrodsDiam/2,h:12,fn:_globalResolution}).rotateX(90).translate([20,_nemaXY,4]),
+    cylinder({r:_YrodsDiam/2,h:12,fn:_globalResolution}).rotateX(90).translate([20,_nemaXY,4+_ZmotorXYPadding]),
     //extra bool for printable
     cube({size:[15,10,15]}).rotateZ(30).translate([_nemaXY/2,_nemaXY-19.5,0]),
     // round
-    roundBoolean2(5,_nemaXY,"br").translate([-_wallThickness-thickness,0,thickness+15]),
+    roundBoolean2(5,_nemaXY,"br").translate([-_wallThickness-thickness,0,thickness+15+_ZmotorXYPadding]),
     //  holes to fix on the wood side - version simple
     // wood screw holes
     cylinder({r:2.1,h:20,fn:_globalResolution}).rotateX(-90).rotateZ(90).translate([-_wallThickness,5,5]),
@@ -585,7 +586,7 @@ function motorXY(side){
     if(side=="left"){
         mesh = union(
                 mesh,
-                text3d("L").scale(0.3).translate([0,15,20+thickness])
+                text3d("L").scale(0.3).translate([0,15,20+thickness+_ZmotorXYPadding])
         
                 );
     }
@@ -594,7 +595,7 @@ function motorXY(side){
                 mesh,
                 // extra long to attach y endstop
 
-                text3d("R").scale(0.3).rotateY(180).translate([0,15,20+thickness+0.5])
+                text3d("R").scale(0.3).rotateY(180).translate([0,15,20+thickness+0.5+_ZmotorXYPadding])
                 );
     }
     
@@ -1409,6 +1410,7 @@ function main(params){
     YrodLength = _printableDepth + 65; // 5: rod support inside parts.
     ZrodLength = _printableHeight + 110;
 
+    _ZmotorXYPadding = _YrodsDiam - 6;
 
     echo("wood depth:"+_globalDepth + " width:"+_globalWidth+" height:"+_globalHeight);
     echo("X rod length:"+XrodLength + " Y rod length:"+YrodLength+" Zrodlength:"+ZrodLength);
@@ -1448,12 +1450,12 @@ switch(output){
             _rods(),
             
             //nema left
-            _nema(_nemaXY).translate([-_globalWidth/2,-_globalDepth/2,_globalHeight-_nemaXY-20]),
+            _nema(_nemaXY).translate([-_globalWidth/2,-_globalDepth/2,_globalHeight-_nemaXY-20-_ZmotorXYPadding]),
             // nema right
-            _nema(_nemaXY).translate([_globalWidth/2-_nemaXY,-_globalDepth/2,_globalHeight-_nemaXY-20]),
+            _nema(_nemaXY).translate([_globalWidth/2-_nemaXY,-_globalDepth/2,_globalHeight-_nemaXY-20-_ZmotorXYPadding]),
 
-            motorXY("left").translate([-_globalWidth/2,-_globalDepth/2,_globalHeight-20]).setColor(0.3,0.9,0.3),
-            motorXY("right").mirroredX().translate([_globalWidth/2,-_globalDepth/2,_globalHeight-20]).setColor(0.3,0.9,0.3),
+            motorXY("left").translate([-_globalWidth/2,-_globalDepth/2,_globalHeight-20-_ZmotorXYPadding]).setColor(0.3,0.9,0.3),
+            motorXY("right").mirroredX().translate([_globalWidth/2,-_globalDepth/2,_globalHeight-20-_ZmotorXYPadding]).setColor(0.3,0.9,0.3),
             bearingsXY("left").translate([-_globalWidth/2-_wallThickness-5,_globalDepth/2-26,_globalHeight-17]).setColor(0.3,0.9,0.3),
             bearingsXY("right").mirroredX().translate([_globalWidth/2+_wallThickness+5,_globalDepth/2-26,_globalHeight-17]).setColor(0.3,0.9,0.3),
             slideY("left").translate([-_globalWidth/2+6,XaxisOffset,_globalHeight-21]).setColor(0.3,0.9,0.3),
@@ -1484,8 +1486,8 @@ switch(output){
             res.push(InductiveSensorSupport().translate([headoffset+1.5,XaxisOffset-30,_globalHeight+13]).setColor(0.3,0.9,0.3));
             
             // nema extruder
-            res.push(_nema(_nemaE).rotateX(90).rotateZ(180).translate([_globalWidth/2,-_globalDepth/2,_globalHeight-_nemaE-65]));
-            res.push(extruder().rotateX(90).rotateZ(180).translate([_globalWidth/2-25,-_globalDepth/2+50,_globalHeight-90]));
+            res.push(_nema(_nemaE).rotateX(90).rotateZ(180).translate([_globalWidth/2,-_globalDepth/2,_globalHeight-_nemaE-65-_ZmotorXYPadding]));
+            res.push(extruder().rotateX(90).rotateZ(180).translate([_globalWidth/2-25,-_globalDepth/2+50,_globalHeight-90-_ZmotorXYPadding]));
 
 
 
@@ -1558,7 +1560,8 @@ switch(output){
         ];
     break;
     case 5:
-        res = [motorXY("left"), motorXY("right").mirroredX().translate([-40,0,0])];
+        var xOffset = -40 - ( _wallThickness - 10) * 2;
+        res = [motorXY("left"), motorXY("right").mirroredX().translate([xOffset,0,0])];
     break;
     case 6:
         res = [bearingsXY("left"),bearingsXY("right").mirroredX().translate([-40,0,0]) ];
