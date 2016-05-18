@@ -374,7 +374,7 @@ var mesh;
             );
     }
     
-    if(output==0){
+    if(output===0){
         mesh = union(
                 mesh,
                 bearing608z().translate([bearingHoleOffsetX,Y/2,15.5]),
@@ -740,17 +740,17 @@ function extruder(part){
          cylinder({r:1.35,h:15,fn:_globalResolution}).rotateY(-90).translate([X/2-15,-Y/2+10,9]),
          cylinder({r:1.35,h:15,fn:_globalResolution}).rotateY(-90).translate([X/2-15,-Y/2+10,0])
        
-    )
+    );
 
 }
 function extruderPart(part,X,Y,Z){
     // lower part only
-    if(part==0){
-        return cube({size:[X,Y,Z],center:true}).translate([0,5,0])
+    if(part===0){
+        return cube({size:[X,Y,Z],center:true}).translate([0,5,0]);
     }
     // uppper part only
     else if(part==1){
-        return cube({size:[X,Y,Z],center:true}).translate([0,5,Z+0.05])
+        return cube({size:[X,Y,Z],center:true}).translate([0,5,Z+0.05]);
     }
     else {
         return union(
@@ -758,7 +758,7 @@ function extruderPart(part,X,Y,Z){
             cube({size:[X,Y,Z],center:true}).translate([0,5,0]),
             // main top
             cube({size:[X,Y,Z],center:true}).translate([0,5,Z+0.05])
-        )
+        );
     }
 }
 
@@ -774,10 +774,10 @@ function extruderSupport(part){
                 cylinder({r:2.1,h:10,fn:_globalResolution}).rotateY(-90).translate([-20,-29,0]),
                 cylinder({r:2.1,h:10,fn:_globalResolution}).rotateY(-90).translate([-20,40,0])
             
-        )
+        );
     }
     else{
-        return cube(1)
+        return cube(1);
     }
 }
 
@@ -790,7 +790,7 @@ function extruderOut(jheadOffsetX,Y,Z){
         cylinder({r:2.7,h:5,fn:_globalResolution}).rotateX(-90).translate([jheadOffsetX,Y/2,Z/2]),
         cylinder({r:2.7,h:5,fn:_globalResolution}).rotateX(-90).translate([jheadOffsetX,-Y/2+5,Z/2])
 
-        )
+        );
 
 }
 function extruderFilament(jheadOffsetX,Y,Z){
@@ -798,7 +798,7 @@ function extruderFilament(jheadOffsetX,Y,Z){
         return union(
         cylinder({r:1,h:Y,fn:_globalResolution}).rotateX(-90).translate([jheadOffsetX,-Y/2,Z/2]),
         cylinder({r1:3,r2:1,h:5,fn:_globalResolution}).rotateX(-90).translate([jheadOffsetX,10,Z/2])
-        )
+        );
 }
 
 
@@ -822,7 +822,7 @@ function clipGlassFront(){
     var bedSupportThickness = 10;
     var mesh = difference(
         cube({size:[20,8,bedSupportThickness+glassThickness+10]})
-    )
+    );
     mesh.properties.connect1 = new CSG.Connector([0,0, 0], [1, 0, 0], [0, 0, 1]);
     return mesh;
 }
@@ -959,7 +959,7 @@ function wallSizeText(){
         // bottom
         text3d("bottom: "+(_globalWidth+(_wallThickness*2))+" x "+(_globalDepth+_wallThickness)).scale(0.5).translate([0,-_globalDepth/2,_wallThickness]).setColor(0.2,0.3,0.2)
 
-    )
+    );
 }
 
 function _rodsXY() {
@@ -1057,7 +1057,7 @@ function Mx(diam,length){
     return union(
         cylinder({r:diam/2+1,h:3,fn:_globalResolution}),
         cylinder({r:diam/2,h:length,fn:_globalResolution}).translate([0,0,3])
-    )
+    );
 }
 
 
@@ -1178,7 +1178,7 @@ function Gt2Holder(boolOffset,height){
             cube([1,1,h-3]).translate([h-1,boolOffset+beltThickness,3])
 
         )
-    )
+    );
 }
 
 function Gt2HolderSuspendedRight(boolOffset,height){
@@ -1196,7 +1196,7 @@ function Gt2HolderSuspendedRight(boolOffset,height){
             cube([1,1,h-3]).translate([h-1,boolOffset+beltThickness,3])
 
         )
-    )
+    );
 }
 
 function Gt2HolderSuspendedLeft(boolOffset,height){
@@ -1214,7 +1214,7 @@ function Gt2HolderSuspendedLeft(boolOffset,height){
             cube([1,1,h-3]).translate([h-1,boolOffset+beltThickness,3])
 
         )
-    )
+    );
 }
 
 function Gt2HolderBool(boolOffset,height){
@@ -1228,7 +1228,7 @@ function Gt2HolderBool(boolOffset,height){
             cube([1,1,h-3]).translate([h-5,boolOffset+beltThickness,3]),
             cube([1,1,h-3]).translate([h-3,boolOffset+beltThickness,3]),
             cube([1,1,h-3]).translate([h-1,boolOffset+beltThickness,3])
-        )
+        );
 }
 
 function Gt2Holder3(boolOffset,height){
@@ -1245,7 +1245,7 @@ function Gt2Holder3(boolOffset,height){
             cube([1,1,h-3]).translate([h-1,boolOffset+1,6])
 
         )
-    )
+    );
 }
 function Gt2Holder2(){
     var beltThickness = 0.9;
@@ -1268,7 +1268,7 @@ function Gt2Holder2(){
             cube([1,1,7]).translate([11,3+beltThickness,3])
 
         )
-    )
+    );
 }
 
 function endstop_meca(){
@@ -1355,8 +1355,8 @@ function main(params){
     _XYrodsDiam = params._XYrodsDiam;
     _ZrodsDiam = params._ZrodsDiam;
     _globalResolution = params._globalResolution;
-    _nemaXYZ=parseInt(params._nemaXYZ);
-    output=parseInt(params._output); 
+    _nemaXYZ=parseInt(params._nemaXYZ, 10);
+    output=parseInt(params._output, 10); 
     // update calculated values 
     if(_XYrodsDiam==6){ _XYlmDiam = 12.2;_XYlmLength = 19.1;}
     if(_XYrodsDiam==8){ _XYlmDiam = 15.2;_XYlmLength =24.1;}
