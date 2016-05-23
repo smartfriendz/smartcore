@@ -42,6 +42,7 @@ var beltXAddon = 120; // belt extra length over rod size - bearing guides and di
 var beltYAddon = 30; // belt extra length over y rod size - distance from motor pulley edge to Y rod mount and
 
 // global for work
+var screwHoleRadius = 1.9; // For M3, with some clearance for a clean hole
 var _bearingsDepth = 35; // hack.need to be cleaned. 
 var headoffset = -90; // used to place the head along X axis
 var XaxisOffset = -40; // used to palce the X axis on Y
@@ -237,10 +238,10 @@ function slideZ2(){
             cube({size:[side_form_size+1,2,height]}).translate([_ZrodsWidth,0,0]),
             cube({size:[side_form_size+1,2,height]}).translate([-side_form_size-1,0,0]),
             // side holes for lmXuu screws
-            cylinder({r:1.4,h:30,fn:_globalResolution}).rotateX(90).translate([_ZrodsWidth+set_screw_offset,20,height-10]),
-            cylinder({r:1.4,h:30,fn:_globalResolution}).rotateX(90).translate([_ZrodsWidth+set_screw_offset,20,10]),
-            cylinder({r:1.4,h:30,fn:_globalResolution}).rotateX(90).translate([-set_screw_offset,20,height-10]),
-            cylinder({r:1.4,h:30,fn:_globalResolution}).rotateX(90).translate([-set_screw_offset,20,10]),
+            cylinder({r:screwHoleRadius,h:30,fn:_globalResolution}).rotateX(90).translate([_ZrodsWidth+set_screw_offset,20,height-10]),
+            cylinder({r:screwHoleRadius,h:30,fn:_globalResolution}).rotateX(90).translate([_ZrodsWidth+set_screw_offset,20,10]),
+            cylinder({r:screwHoleRadius,h:30,fn:_globalResolution}).rotateX(90).translate([-set_screw_offset,20,height-10]),
+            cylinder({r:screwHoleRadius,h:30,fn:_globalResolution}).rotateX(90).translate([-set_screw_offset,20,10]),
             // top holes
             cylinder({r:2,h:30,fn:_globalResolution}).translate([-4,-20,height-30]),
             cylinder({r:2,h:30,fn:_globalResolution}).translate([_ZrodsWidth+3,-20,height-30]),
@@ -303,7 +304,7 @@ var mesh;
         cylinder({r:4.1,h:Z-bearingsOffsetZ,fn:_globalResolution}).translate([bearingHoleOffsetX,Y/2,bearingsOffsetZ]),
         cylinder({r:3.8,h:bearingsOffsetZ,fn:_globalResolution}).translate([bearingHoleOffsetX,Y/2,0]),
         // screw for endstop X
-        //cylinder({r:1.3,h:12,fn:_globalResolution}).rotateX(90).translate([X+12,Y+1,13]),
+        //cylinder({r:screwHoleRadius,h:12,fn:_globalResolution}).rotateX(90).translate([X+12,Y+1,13]),
         // rod Y bool
         cylinder({r:_XYlmDiam/2+0.1,h:Y+15,fn:_globalResolution}).rotateX(-90).translate([14,-15,5]),
         // rod Y support slice boolean 
@@ -320,11 +321,11 @@ var mesh;
         cube({size:[13,1,8+(_XYrodsDiam/2)]}).translate([X+2,Y/2,Z]),
         
         // screws to fix rod X 
-        cylinder({r:1.3,h:Y+2,fn:_globalResolution}).rotateX(-90).translate([X+10,-1,Z+2+(_XYrodsDiam/2)]),
+        cylinder({r:screwHoleRadius,h:Y+2,fn:_globalResolution}).rotateX(-90).translate([X+10,-1,Z+2+(_XYrodsDiam/2)]),
 
         // screws for rod Y support
-        cylinder({r:1.3,h:20,fn:_globalResolution}).translate([(-_XYlmDiam/5) + 3,-5,0]),
-        cylinder({r:1.3,h:30,fn:_globalResolution}).translate([(-_XYlmDiam/5) + 3,15,-20])
+        cylinder({r:screwHoleRadius,h:20,fn:_globalResolution}).translate([(-_XYlmDiam/5) + 3,-5,0]),
+        cylinder({r:screwHoleRadius,h:30,fn:_globalResolution}).translate([(-_XYlmDiam/5) + 3,15,-20])
         
 
     );
@@ -336,7 +337,7 @@ var mesh;
                 // extra part for endstop X to click on 
                 difference(
                     cube({size:[10,Y+5,14]}).translate([X+5,-5,-14]),
-                    cylinder({r:1.3,h:Y+10,fn:_globalResolution}).rotateX(-90).translate([X+10,-6,-2-(_XYrodsDiam/2)]),
+                    cylinder({r:screwHoleRadius,h:Y+10,fn:_globalResolution}).rotateX(-90).translate([X+10,-6,-2-(_XYrodsDiam/2)]),
 
                     // Rod pinch slicer
                     cube({size:[13,1,10+(_XYrodsDiam/2)]}).translate([X+2,Y/2,-10-(_XYrodsDiam/2)]),
@@ -360,7 +361,7 @@ var mesh;
                     cube({size:[10,Y,5]}).translate([X+5,0,-5]),
                     cylinder({r:5,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,-5])
                     ),
-                cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,-2-(_XYrodsDiam/2)]),
+                cylinder({r:screwHoleRadius,h:Y,fn:_globalResolution}).rotateX(-90).translate([X+10,0,-2-(_XYrodsDiam/2)]),
                 cube({size:[13,1,7+(_XYrodsDiam/2)]}).translate([X+2,Y/2,-7-(_XYrodsDiam/2)]),
 
                 // Xrods hole bottom
@@ -369,7 +370,7 @@ var mesh;
                 // extra part for endstop Y click
                 difference(
                     cube({size:[(_XYlmDiam/2) + 2,Y-10,10]}).translate([(-_XYlmDiam/5) - 1,Y-(Y-10),-8]),
-                    cylinder({r:1.3,h:30,fn:_globalResolution}).translate([(-_XYlmDiam/5) + 3,15,-20])
+                    cylinder({r:screwHoleRadius,h:30,fn:_globalResolution}).translate([(-_XYlmDiam/5) + 3,15,-20])
                 )
             );
     }
@@ -436,15 +437,15 @@ function head(){
             cube({size:[washer,_XYlmDiam-2,10]}).translate([2*washer+2*_XYlmLength,Y/2-_XYlmDiam/2+1,15+xrodOffset-1])
             ),
         // head attach holes 
-         cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2-headAttachHolesXwidth/2,0,40]),
-         cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2-headAttachHolesXwidth/2,0,28]),
-         cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2+headAttachHolesXwidth/2,0,40]),
-         cylinder({r:1.3,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2+headAttachHolesXwidth/2,0,28]),
+         cylinder({r:screwHoleRadius,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2-headAttachHolesXwidth/2,0,40]),
+         cylinder({r:screwHoleRadius,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2-headAttachHolesXwidth/2,0,28]),
+         cylinder({r:screwHoleRadius,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2+headAttachHolesXwidth/2,0,40]),
+         cylinder({r:screwHoleRadius,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2+headAttachHolesXwidth/2,0,28]),
          
         // screw to fix endstop X under 
-         cylinder({r:1.6,h:10,fn:_globalResolution}).translate([3,-2,5]) ,
+         cylinder({r:screwHoleRadius,h:10,fn:_globalResolution}).translate([3,-2,5]) ,
          // screw to fix bottom Xrod
-         cylinder({r:1.6,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2,0,9])   
+         cylinder({r:screwHoleRadius,h:Y,fn:_globalResolution}).rotateX(-90).translate([X/2,0,9])   
 
     );
     return mesh;
@@ -473,14 +474,14 @@ function HeadSupportJhead(){
          cylinder({r:intDiam/2+0.1,h:intDiamHeight,fn:_globalResolution}).translate([width/2,depth+1,height-5]),
          cylinder({r:13,h:height-12,fn:_globalResolution}).translate([width/2,depth+1,0]),
          // jhead attach holes 
-         cylinder({r:1.3,h:30,fn:_globalResolution}).rotateX(-90).translate([width/2-endxJheadAttachHolesWidth/2,0,height-4]),
-         cylinder({r:1.3,h:30,fn:_globalResolution}).rotateX(-90).translate([width/2+endxJheadAttachHolesWidth/2,0,height-4]),
+         cylinder({r:screwHoleRadius,h:30,fn:_globalResolution}).rotateX(-90).translate([width/2-endxJheadAttachHolesWidth/2,0,height-4]),
+         cylinder({r:screwHoleRadius,h:30,fn:_globalResolution}).rotateX(-90).translate([width/2+endxJheadAttachHolesWidth/2,0,height-4]),
 
          // head attach holes 
-         slottedHole(3.2,8,10).rotateX(90).translate([width/2-11,depth-5,5]),
-         slottedHole(3.2,8,10).rotateX(90).translate([width/2+11,depth-5,5]),
-         slottedHole(3.2,8,10).rotateX(90).translate([width/2-11,depth-5,18]),
-         slottedHole(3.2,8,10).rotateX(90).translate([width/2+11,depth-5,18]),
+         slottedHole(screwHoleRadius*2,8,10).rotateX(90).translate([width/2-11,depth-5,5]),
+         slottedHole(screwHoleRadius*2,8,10).rotateX(90).translate([width/2+11,depth-5,5]),
+         slottedHole(screwHoleRadius*2,8,10).rotateX(90).translate([width/2-11,depth-5,18]),
+         slottedHole(screwHoleRadius*2,8,10).rotateX(90).translate([width/2+11,depth-5,18]),
          // extra hole back right to let space to insert belt. ( and left too , to be equal )
          cylinder({r:8,h:10,fn:_globalResolution}).translate([0,0,height-10]),
          cylinder({r:8,h:10,fn:_globalResolution}).translate([width,0,height-10])
@@ -512,8 +513,8 @@ function InductiveSensorSupport(){
          cylinder({r:intDiam/2+0.1,h:intDiamHeight,fn:_globalResolution}).translate([width/2,depth,height-5]),
          
          // head attach holes 
-         cylinder({r:1.6,h:13,fn:_globalResolution}).rotateX(-90).translate([width/2-endxJheadAttachHolesWidth/2,0,height/2]),
-        cylinder({r:1.6,h:13,fn:_globalResolution}).rotateX(-90).translate([width/2+endxJheadAttachHolesWidth/2,0,height/2]),
+         cylinder({r:screwHoleRadius,h:13,fn:_globalResolution}).rotateX(-90).translate([width/2-endxJheadAttachHolesWidth/2,0,height/2]),
+        cylinder({r:screwHoleRadius,h:13,fn:_globalResolution}).rotateX(-90).translate([width/2+endxJheadAttachHolesWidth/2,0,height/2]),
 
          // inductive support hole
          cylinder({r:9.3,h:height,fn:_globalResolution}).translate([width+15,depth+2,-25]),
